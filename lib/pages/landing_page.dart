@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Facial Recognition App',
+
       theme: ThemeData(primarySwatch: Colors.green),
       home: const IntroPage(),
     );
@@ -40,7 +40,7 @@ class IntroPage extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.all(24),
             child: Text(
-              'Know your place',
+              'FACE TUAH',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24,
@@ -63,7 +63,7 @@ class IntroPage extends StatelessWidget {
                 color: Colors.green,
                 borderRadius: BorderRadius.circular(12),
               ),
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(18),
               width: 300,
               child: const Center(
                 child: Text(
