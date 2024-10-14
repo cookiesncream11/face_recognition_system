@@ -35,7 +35,7 @@ class IntroPage extends StatelessWidget {
               bottom: 0,
               top: 100,
             ),
-            child: Image.asset('lib/images/qr-scan.png'),
+            child: Image.asset('lib/images/indian.jpg'),
           ),
           const Padding(
             padding: EdgeInsets.all(24),
@@ -44,7 +44,7 @@ class IntroPage extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.bold,  
               ),
             ),
           ),
