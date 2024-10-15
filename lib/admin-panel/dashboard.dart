@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login_page.dart'; // Import the login page
+import 'login_page.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -16,7 +16,7 @@ class DashboardPage extends StatelessWidget {
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.green,
+                color: Color(0xFF800000), // Maroon color
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

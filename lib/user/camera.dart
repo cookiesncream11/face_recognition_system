@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'landing_page.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class Recognize extends StatefulWidget {
   const Recognize({Key? key}) : super(key: key);
@@ -16,23 +17,30 @@ class _RecognizeState extends State<Recognize> {
   final ImagePicker _picker = ImagePicker();
 
   Future<void> chooseImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
+    // Use file_picker for web
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+
+    if (result != null) {
       setState(() {
-        _image = File(image.path);
+        _image = File(result.files.single.path!);
       });
     }
   }
 
   Future<void> captureImage() async {
+    // Check if the platform is web
     if (kIsWeb) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            content: Text("Camera capture is not available on the web.")),
+          content: Text("Camera capture is not available on the web."),
+        ),
       );
       return;
     }
 
+    // Use image_picker for mobile
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
     if (image != null) {
       setState(() {
@@ -44,7 +52,7 @@ class _RecognizeState extends State<Recognize> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Set the background color to white
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -65,7 +73,7 @@ class _RecognizeState extends State<Recognize> {
                 ),
               ],
             ),
-            const SizedBox(height: 20), // Space between button and content
+            const SizedBox(height: 20),
             Expanded(
               child: Center(
                 child: Column(
@@ -88,14 +96,13 @@ class _RecognizeState extends State<Recognize> {
                           ),
                     const SizedBox(height: 20),
                     SizedBox(
-                      width: 200, // Fixed width for buttons
-                      height: 50, // Fixed height for buttons
+                      width: 200,
+                      height: 50,
                       child: ElevatedButton(
                         onPressed: chooseImage,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(
-                              0xFF250000), // Button background color
-                          foregroundColor: Colors.white, // Button text color
+                          backgroundColor: const Color(0xFF250000),
+                          foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
@@ -105,14 +112,13 @@ class _RecognizeState extends State<Recognize> {
                     ),
                     const SizedBox(height: 10),
                     SizedBox(
-                      width: 200, // Fixed width for buttons
-                      height: 50, // Fixed height for buttons
+                      width: 200,
+                      height: 50,
                       child: ElevatedButton(
                         onPressed: captureImage,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(
-                              0xFF250000), // Button background color
-                          foregroundColor: Colors.white, // Button text color
+                          backgroundColor: const Color(0xFF250000),
+                          foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
