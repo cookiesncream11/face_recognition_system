@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'landing_page.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class Recognize extends StatefulWidget {
   const Recognize({Key? key}) : super(key: key);
@@ -24,6 +25,14 @@ class _RecognizeState extends State<Recognize> {
   }
 
   Future<void> captureImage() async {
+    if (kIsWeb) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text("Camera capture is not available on the web.")),
+      );
+      return;
+    }
+
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
     if (image != null) {
       setState(() {
@@ -35,22 +44,17 @@ class _RecognizeState extends State<Recognize> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF0F0F0), // Lighter background color
+      backgroundColor: const Color(0xFFF0F0F0),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF6200EE), // Lighter AppBar color
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => const IntroPage()),
+              MaterialPageRoute(builder: (context) => const GetStartedPage()),
               (route) => false,
             );
           },
-        ),
-        title: const Text(
-          'Image Recognizer',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
       body: Center(
@@ -59,7 +63,7 @@ class _RecognizeState extends State<Recognize> {
           children: <Widget>[
             _image != null
                 ? ClipRRect(
-                    borderRadius: BorderRadius.circular(75), // Rounded corners
+                    borderRadius: BorderRadius.circular(75),
                     child: Image.file(
                       _image!,
                       height: 150,
@@ -70,7 +74,7 @@ class _RecognizeState extends State<Recognize> {
                 : const Icon(
                     Icons.image,
                     size: 150,
-                    color: Colors.grey, // Lighter icon color
+                    color: Colors.grey,
                   ),
             const SizedBox(height: 20),
             ElevatedButton(
