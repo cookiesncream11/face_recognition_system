@@ -1,5 +1,5 @@
 import 'package:face_recognition_design/admin-panel/dashboard.dart';
-import 'package:face_recognition_design/pages/landing_page.dart'; // Import the Dashboard page
+import 'package:face_recognition_design/user/landing_page.dart'; // Import the Dashboard page
 import 'package:flutter/material.dart';
 
 void main() {
@@ -90,8 +90,7 @@ class _LoginPageState extends State<LoginPage> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    const GetStartedPage(), // Ensure this page exists
+                builder: (context) => const GetStartedPage(),
               ),
             );
           },
@@ -106,14 +105,13 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const CircleAvatar(
-                  radius: 30,
-                  backgroundColor: Colors.green,
-                  child: Icon(
-                    Icons.admin_panel_settings,
-                    size: 40,
-                    color: Colors.white,
-                  ),
+                  radius: 64,
+                  backgroundColor: Colors.transparent,
+                  backgroundImage: AssetImage(
+                      'lib/images/user.png'), // Use your user image here
                 ),
+                const SizedBox(height: 20),
+                Text("Admin Login"),
                 const SizedBox(height: 20),
                 Container(
                   width: 300,
