@@ -14,7 +14,7 @@ class DashboardPage extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            DrawerHeader(
+            const DrawerHeader(
               decoration: BoxDecoration(
                 color: Color(0xFF800000), // Maroon color
               ),
@@ -70,8 +70,8 @@ class DashboardPage extends StatelessWidget {
           ],
         ),
       ),
-      body: Center(
-        child: const Text('Welcome to the Dashboard!'),
+      body: const Center(
+        child: Text('Welcome to the Dashboard!'),
       ),
     );
   }

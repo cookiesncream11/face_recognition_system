@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 import 'camera.dart';
 import '../admin-panel/login_page.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flutter/services.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+    ),
+  );
   runApp(const MyApp());
 }
 
@@ -15,6 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       home: GetStartedPage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -23,126 +30,152 @@ class GetStartedPage extends StatefulWidget {
   const GetStartedPage({super.key});
 
   @override
-  GetStartedPageState createState() => GetStartedPageState(); // Changed here
+  GetStartedPageState createState() => GetStartedPageState();
 }
 
-class GetStartedPageState extends State<GetStartedPage> {
-  late VideoPlayerController _controller;
+class GetStartedPageState extends State<GetStartedPage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _rotationAnimation;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset('lib/images/fdsap.mp4')
-      ..setLooping(true)
-      ..initialize().then((_) {
-        setState(() {
-          _controller.play(); // Start playing the video
-        });
-      });
+
+    // Animation Setup
+    _animationController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 10))
+          ..repeat();
+
+    _rotationAnimation =
+        Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.linear,
+    ));
   }
 
   @override
   void dispose() {
-    _controller.dispose(); // Dispose of the controller when not needed
+    _animationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: Image.asset(
-              'lib/images/add-user.png', // Ensure this image exists
-              height: 24,
-              width: 24,
-            ),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      const Admin(), // Ensure this page exists
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // Video Background
-          _controller.value.isInitialized
-              ? SizedBox.expand(
-                  child: VideoPlayer(_controller),
-                )
-              : const Center(
-                  child: CircularProgressIndicator()), // Show loading indicator
-
           // Centered Content
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Centered image
-                Image.asset(
-                  'lib/images/indian.jpg', // Ensure this image exists
-                  height: 300,
-                  fit: BoxFit.cover,
-                ),
-                const SizedBox(height: 20),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 150.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'lib/images/indian.jpg',
+                    height: 250,
+                    fit: BoxFit.cover,
+                  ),
+                  const SizedBox(height: 30),
 
-                // Animated Text
-                AnimatedTextKit(
-                  animatedTexts: [
-                    TypewriterAnimatedText(
-                      'FACE TUAH',
-                      speed: const Duration(milliseconds: 100),
-                      textStyle: const TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF630606),
+                  // Animated Text
+                  AnimatedTextKit(
+                    animatedTexts: [
+                      TypewriterAnimatedText(
+                        'FACE TUAH',
+                        speed: const Duration(milliseconds: 100),
+                        textStyle: const TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF630606),
+                        ),
+                      ),
+                    ],
+                    totalRepeatCount: 100,
+                    pause: const Duration(milliseconds: 500),
+                    displayFullTextOnTap: true,
+                    stopPauseOnTap: false,
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Responsive Button
+                  Container(
+                    constraints: BoxConstraints(
+                      maxWidth: 300, // Set a max width for the button
+                      minWidth:
+                          200, // Set a min width to keep it from getting too small
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Recognize(),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF250000),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 15,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        "Get Started",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                  ],
-                  totalRepeatCount: 5,
-                  pause: const Duration(milliseconds: 500),
-                  displayFullTextOnTap: true,
-                  stopPauseOnTap: false,
-                ),
-
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const Recognize(),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF250000),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 50,
-                      vertical: 15,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
                   ),
-                  child: const Text(
-                    "Get Started",
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-          // Rotated Text
+
+          // Rotating Image (Top Left Corner)
           Positioned(
-            top: 50,
+            top: -40,
+            left: -40,
+            child: RotationTransition(
+              turns: _rotationAnimation,
+              child: Image.asset(
+                'lib/images/bilog.png',
+                height: 350,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+
+          // Admin Icon
+          Positioned(
+            top: 5,
+            right: 0,
+            child: IconButton(
+              icon: Image.asset(
+                'lib/images/add-user.png',
+                height: 24,
+                width: 24,
+              ),
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Admin(),
+                  ),
+                );
+              },
+            ),
+          ),
+
+          // (We Listen, We Anticipate, We Deliver)
+          Positioned(
+            top: 120,
             right: -30,
             child: Column(
               children: [
@@ -151,10 +184,9 @@ class GetStartedPageState extends State<GetStartedPage> {
                   child: const Text(
                     'We Listen',
                     style: TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFF630606),
-                      fontWeight: FontWeight.bold,
-                    ),
+                        fontSize: 12,
+                        color: Color(0xFF630606),
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(height: 120),
@@ -163,10 +195,9 @@ class GetStartedPageState extends State<GetStartedPage> {
                   child: const Text(
                     'We Anticipate',
                     style: TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFF630606),
-                      fontWeight: FontWeight.bold,
-                    ),
+                        fontSize: 12,
+                        color: Color(0xFF630606),
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(height: 120),
@@ -175,10 +206,9 @@ class GetStartedPageState extends State<GetStartedPage> {
                   child: const Text(
                     'We Deliver',
                     style: TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFF630606),
-                      fontWeight: FontWeight.bold,
-                    ),
+                        fontSize: 12,
+                        color: Color(0xFF630606),
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               ],

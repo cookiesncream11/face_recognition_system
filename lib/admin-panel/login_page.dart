@@ -1,5 +1,5 @@
 import 'package:face_recognition_design/admin-panel/dashboard.dart';
-import 'package:face_recognition_design/user/landing_page.dart'; // Import the Dashboard page
+import 'package:face_recognition_design/user/landing_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: const Text('OK'),
             ),
@@ -52,27 +52,18 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _login() {
+  void _login(Function onSuccess) {
     if (_formKey.currentState!.validate()) {
-      // Check if the username and password are both "admin"
       if (_emailController.text == 'admin' &&
           _passwordController.text == 'admin') {
-        // Show success dialog
         _showDialog('Logging in...');
 
-        // Navigate to the dashboard after a short delay
         Future.delayed(const Duration(seconds: 1), () {
-          // Clear text fields
           _emailController.clear();
           _passwordController.clear();
-
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const DashboardPage()),
-          );
+          onSuccess(); // Call the callback to navigate
         });
       } else {
-        // Show error dialog
         _showDialog('Invalid username or password');
         _emailController.clear();
         _passwordController.clear();
@@ -83,93 +74,134 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const GetStartedPage(),
-              ),
-            );
-          },
-        ),
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const CircleAvatar(
-                  radius: 64,
-                  backgroundColor: Colors.transparent,
-                  backgroundImage: AssetImage(
-                      'lib/images/user.png'), // Use your user image here
-                ),
-                const SizedBox(height: 20),
-                Text("Admin Login"),
-                const SizedBox(height: 20),
-                Container(
-                  width: 300,
-                  child: TextFormField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Username:',
-                      prefixIcon: Icon(Icons.person),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your username';
-                      }
-                      return null;
-                    },
-                    // Listen for "Enter" key press
-                    onFieldSubmitted: (value) {
-                      _login();
-                    },
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  width: 300,
-                  child: TextFormField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
-                      prefixIcon: Icon(Icons.lock),
-                    ),
-                    obscureText: true,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
-                      }
-                      return null;
-                    },
-                    // Listen for "Enter" key press
-                    onFieldSubmitted: (value) {
-                      _login();
-                    },
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  width: 300,
-                  child: ElevatedButton(
-                    onPressed: _login,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 50, vertical: 15),
-                    ),
-                    child: const Text('Login'),
-                  ),
-                ),
-              ],
-            ),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('lib/images/bgfdsap.png'),
+            fit: BoxFit.cover,
           ),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              top: 2,
+              left: 8,
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const GetStartedPage(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Center(
+              child: SizedBox(
+                width: 350, // Set a width for the container
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        spreadRadius: 5,
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  padding: const EdgeInsets.all(20.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const CircleAvatar(
+                          radius: 64,
+                          backgroundColor: Colors.transparent,
+                          backgroundImage: AssetImage('lib/images/user.png'),
+                        ),
+                        const SizedBox(height: 20),
+                        const Text("Admin Login"),
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          controller: _emailController,
+                          decoration: const InputDecoration(
+                            labelText: 'Username:',
+                            prefixIcon: Icon(Icons.person),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your username';
+                            }
+                            return null;
+                          },
+                          onFieldSubmitted: (value) {
+                            _login(() {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const DashboardPage()),
+                              );
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _passwordController,
+                          decoration: const InputDecoration(
+                            labelText: 'Password',
+                            prefixIcon: Icon(Icons.lock),
+                          ),
+                          obscureText: true,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your password';
+                            }
+                            return null;
+                          },
+                          onFieldSubmitted: (value) {
+                            _login(() {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const DashboardPage()),
+                              );
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () {
+                            _login(() {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const DashboardPage()),
+                              );
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 50, vertical: 15),
+                          ),
+                          child: const Text('Login'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
