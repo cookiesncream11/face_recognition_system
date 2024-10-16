@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 import 'camera.dart';
 import '../admin-panel/login_page.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -12,15 +13,39 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(primarySwatch: Colors.green),
-      home: const GetStartedPage(),
+    return const MaterialApp(
+      home: GetStartedPage(),
     );
   }
 }
 
-class GetStartedPage extends StatelessWidget {
+class GetStartedPage extends StatefulWidget {
   const GetStartedPage({super.key});
+
+  @override
+  GetStartedPageState createState() => GetStartedPageState(); // Changed here
+}
+
+class GetStartedPageState extends State<GetStartedPage> {
+  late VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.asset('lib/images/fdsap.mp4')
+      ..setLooping(true)
+      ..initialize().then((_) {
+        setState(() {
+          _controller.play(); // Start playing the video
+        });
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose(); // Dispose of the controller when not needed
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +72,15 @@ class GetStartedPage extends StatelessWidget {
       ),
       body: Stack(
         children: [
+          // Video Background
+          _controller.value.isInitialized
+              ? SizedBox.expand(
+                  child: VideoPlayer(_controller),
+                )
+              : const Center(
+                  child: CircularProgressIndicator()), // Show loading indicator
+
+          // Centered Content
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -72,12 +106,10 @@ class GetStartedPage extends StatelessWidget {
                       ),
                     ),
                   ],
-                  totalRepeatCount: 5, // Repeat the animation 5 times
-                  pause: const Duration(
-                      milliseconds: 500), // Pause before starting again
-                  displayFullTextOnTap:
-                      true, // Tap to display full text immediately
-                  stopPauseOnTap: false, // Stop pause on tap
+                  totalRepeatCount: 5,
+                  pause: const Duration(milliseconds: 500),
+                  displayFullTextOnTap: true,
+                  stopPauseOnTap: false,
                 ),
 
                 const SizedBox(height: 20),
@@ -93,7 +125,9 @@ class GetStartedPage extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF250000),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 15),
+                      horizontal: 50,
+                      vertical: 15,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -106,42 +140,45 @@ class GetStartedPage extends StatelessWidget {
               ],
             ),
           ),
+          // Rotated Text
           Positioned(
-            top: 50, // Adjust this value to position vertically
-            right: -30, // Adjust this value to position horizontally
+            top: 50,
+            right: -30,
             child: Column(
               children: [
                 Transform.rotate(
-                  angle: -270 * 3.14159 / 180, // Rotate counter-clockwise
+                  angle: -270 * 3.14159 / 180,
                   child: const Text(
                     'We Listen',
                     style: TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF630606),
-                        fontWeight: FontWeight.bold),
+                      fontSize: 12,
+                      color: Color(0xFF630606),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 120),
-                // Space between the lines
                 Transform.rotate(
                   angle: -270 * 3.14159 / 180,
                   child: const Text(
                     'We Anticipate',
                     style: TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF630606),
-                        fontWeight: FontWeight.bold),
+                      fontSize: 12,
+                      color: Color(0xFF630606),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 120), // Space between the lines
+                const SizedBox(height: 120),
                 Transform.rotate(
                   angle: -270 * 3.14159 / 180,
                   child: const Text(
                     'We Deliver',
                     style: TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF630606),
-                        fontWeight: FontWeight.bold),
+                      fontSize: 12,
+                      color: Color(0xFF630606),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
