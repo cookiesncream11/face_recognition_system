@@ -62,6 +62,9 @@ class GetStartedPageState extends State<GetStartedPage>
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -70,70 +73,77 @@ class GetStartedPageState extends State<GetStartedPage>
           Align(
             alignment: Alignment.centerRight,
             child: Padding(
-              padding: const EdgeInsets.only(right: 150.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'lib/images/indian.jpg',
-                    height: 250,
-                    fit: BoxFit.cover,
-                  ),
-                  const SizedBox(height: 30),
-
-                  // Animated Text
-                  AnimatedTextKit(
-                    animatedTexts: [
-                      TypewriterAnimatedText(
-                        'FACE TUAH',
-                        speed: const Duration(milliseconds: 100),
-                        textStyle: const TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF630606),
-                        ),
-                      ),
-                    ],
-                    totalRepeatCount: 100,
-                    pause: const Duration(milliseconds: 500),
-                    displayFullTextOnTap: true,
-                    stopPauseOnTap: false,
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Responsive Button
-                  Container(
-                    constraints: BoxConstraints(
-                      maxWidth: 300, // Set a max width for the button
-                      minWidth:
-                          200, // Set a min width to keep it from getting too small
+              padding: EdgeInsets.only(right: screenWidth > 600 ? 150.0 : 50.0),
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(
+                  bottom: screenHeight * 0.1, // Add padding to prevent overflow
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 100), // Move down the content
+                    Image.asset(
+                      'lib/images/indian.jpg',
+                      height: screenWidth > 600 ? 250 : 200,
+                      fit: BoxFit.cover,
                     ),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Recognize(),
+                    const SizedBox(height: 30),
+
+                    // Animated Text
+                    AnimatedTextKit(
+                      animatedTexts: [
+                        TypewriterAnimatedText(
+                          'FACE TUAH',
+                          speed: const Duration(milliseconds: 100),
+                          textStyle: const TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF630606),
                           ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF250000),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 15,
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                      ],
+                      totalRepeatCount: 100,
+                      pause: const Duration(milliseconds: 500),
+                      displayFullTextOnTap: true,
+                      stopPauseOnTap: false,
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Responsive Button
+                    Container(
+                      constraints: BoxConstraints(
+                        maxWidth: screenWidth > 600
+                            ? 300
+                            : 200, // Max width for larger screens
+                        minWidth: 200, // Minimum width
                       ),
-                      child: const Text(
-                        "Get Started",
-                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Recognize(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF250000),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          "Get Started",
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
