@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'login_page.dart';
+import 'sidebar_pages/employees.dart';
 import 'sidebar_pages/department.dart';
 import 'sidebar_pages/shifts.dart';
-import 'sidebar_pages/employees.dart';
 import 'sidebar_pages/notifications.dart';
 import 'sidebar_pages/settings.dart';
 import 'sidebar_pages/calendar.dart';
@@ -38,6 +37,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   // Variable to track which content to display
   Widget? currentScreen; // Track the currently displayed screen
+  int selectedIndex = 0; // Track the selected index for NavigationRail
 
   @override
   void initState() {
@@ -55,12 +55,24 @@ class _DashboardPageState extends State<DashboardPage> {
             backgroundColor: const Color(0xFF250000),
             unselectedIconTheme: const IconThemeData(color: Colors.white),
             unselectedLabelTextStyle: const TextStyle(color: Colors.white),
-            selectedIconTheme: const IconThemeData(color: Colors.blue),
+            selectedIconTheme: const IconThemeData(color: Colors.black),
+            selectedLabelTextStyle: const TextStyle(color: Colors.white),
+            leading: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: isExpanded
+                  ? Center(
+                      child: Image.asset(
+                        'lib/images/fds-icon.png', // Adjust path as needed
+                        width: 200,
+                        height: 200,
+                      ),
+                    )
+                  : const SizedBox.shrink(), // Hide the logo when collapsed
+            ),
             destinations: const [
               NavigationRailDestination(
                 icon: Icon(Icons.notifications),
-                label: Text("Notifications",
-                    style: TextStyle(color: Colors.white)),
+                label: Text("Notifications"),
               ),
               NavigationRailDestination(
                 icon: Icon(Icons.people),
@@ -87,9 +99,10 @@ class _DashboardPageState extends State<DashboardPage> {
                 label: Text("Logout"),
               ),
             ],
-            selectedIndex: 0,
+            selectedIndex: selectedIndex,
             onDestinationSelected: (int index) {
               setState(() {
+                selectedIndex = index; // Update the selectedIndex
                 switch (index) {
                   case 0:
                     currentScreen =
@@ -130,25 +143,15 @@ class _DashboardPageState extends State<DashboardPage> {
                       IconButton(
                         onPressed: () {
                           setState(() {
-                            isExpanded = !isExpanded;
+                            isExpanded = !isExpanded; // Toggle expansion
                           });
                         },
                         icon: const Icon(Icons.menu),
                       ),
-                      Row(
-                        children: [
-                          Image.asset(
-                            'lib/images/fds.png',
-                            width: 150,
-                            height: 150,
-                          ),
-                          const SizedBox(width: 5),
-                          const Text(
-                            "Attendance Management",
-                            style: TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                      const Text(
+                        "Attendance Management",
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(width: 48),
                     ],
@@ -162,27 +165,30 @@ class _DashboardPageState extends State<DashboardPage> {
                       mainAxisSpacing: 20.0,
                       crossAxisSpacing: 20.0,
                       physics: const NeverScrollableScrollPhysics(),
-                      childAspectRatio:
-                          cardWidth / cardHeight, // Adjust aspect ratio
+                      childAspectRatio: cardWidth / cardHeight,
                       children: const [
                         _InfoCard(
-                            title: "Departments",
-                            count: "5",
-                            icon: Icons.business),
+                          title: "Departments",
+                          count: "5",
+                          icon: Icons.business,
+                        ),
                         _InfoCard(
-                            title: "Shifts", count: "3", icon: Icons.schedule),
+                          title: "Shifts",
+                          count: "3",
+                          icon: Icons.schedule,
+                        ),
                         _InfoCard(
-                            title: "Employees",
-                            count: "20",
-                            icon: Icons.people),
+                          title: "Employees",
+                          count: "20",
+                          icon: Icons.people,
+                        ),
                       ],
                     ),
                   ),
                   const SizedBox(height: 20.0),
                   // Show the currentScreen based on user selection
                   Flexible(
-                    child: currentScreen ??
-                        const CalendarScreen(), // Display the selected screen or default to CalendarScreen
+                    child: currentScreen ?? const CalendarScreen(),
                   ),
                 ],
               ),
@@ -240,8 +246,8 @@ class _InfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: SizedBox(
-        width: _DashboardPageState.cardWidth, // Updated width
-        height: _DashboardPageState.cardHeight, // Updated height
+        width: _DashboardPageState.cardWidth,
+        height: _DashboardPageState.cardHeight,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -264,6 +270,19 @@ class _InfoCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+// Placeholder for Admin class
+class Admin extends StatelessWidget {
+  const Admin({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Admin Login")),
+      body: const Center(child: Text("Admin Login Page")),
     );
   }
 }
