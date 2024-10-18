@@ -32,18 +32,16 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  bool isExpanded = true; // Variable to track NavigationRail expansion
-  static const double cardWidth = 180; // Width of info cards
-  static const double cardHeight = 120; // Height of info cards
-
-  // Variable to track which content to display
-  Widget? currentScreen; // Track the currently displayed screen
-  int selectedIndex = 0; // Track the selected index for NavigationRail
+  bool isExpanded = true;
+  static const double cardWidth = 180;
+  static const double cardHeight = 120;
+  Widget? currentScreen;
+  int selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    currentScreen = const CalendarScreen(); // Default to CalendarScreen
+    currentScreen = const CalendarScreen();
   }
 
   @override
@@ -63,18 +61,18 @@ class _DashboardPageState extends State<DashboardPage> {
               child: isExpanded
                   ? Center(
                       child: Image.asset(
-                        'lib/images/fds-icon.png', // Adjust path as needed
+                        'lib/images/fds-icon.png',
                         width: 200,
                         height: 200,
                       ),
                     )
                   : Center(
                       child: Image.asset(
-                        'lib/images/fds-icon.png', // Same image for collapsed
+                        'lib/images/fds-icon.png',
                         width: 50, // Smaller size
                         height: 50,
                       ),
-                    ), // Show smaller logo when collapsed
+                    ),
             ),
             destinations: [
               _buildDestination(Icons.notifications, "Notifications"),
@@ -88,30 +86,28 @@ class _DashboardPageState extends State<DashboardPage> {
             selectedIndex: selectedIndex,
             onDestinationSelected: (int index) {
               setState(() {
-                selectedIndex = index; // Update the selectedIndex
+                selectedIndex = index;
                 switch (index) {
                   case 0:
-                    currentScreen =
-                        const NotificationsScreen(); // Show Notifications
+                    currentScreen = const NotificationsScreen();
                     break;
                   case 1:
-                    currentScreen = const EmployeesScreen(); // Show Employees
+                    currentScreen = const EmployeesScreen();
                     break;
                   case 2:
-                    currentScreen = const SettingsScreen(); // Show Settings
+                    currentScreen = const SettingsScreen();
                     break;
                   case 3:
-                    currentScreen =
-                        const DepartmentsScreen(); // Show Departments
+                    currentScreen = const DepartmentsScreen();
                     break;
                   case 4:
-                    currentScreen = const ShiftsScreen(); // Show Shifts
+                    currentScreen = const ShiftsScreen();
                     break;
                   case 5:
-                    currentScreen = const CalendarScreen(); // Show Calendar
+                    currentScreen = const CalendarScreen();
                     break;
                   case 6:
-                    _showLogoutConfirmationDialog(); // Show logout confirmation dialog
+                    _showLogoutConfirmationDialog();
                     return; // Exit to prevent setting currentScreen
                 }
               });
@@ -187,9 +183,12 @@ class _DashboardPageState extends State<DashboardPage> {
 
   NavigationRailDestination _buildDestination(IconData icon, String label) {
     return NavigationRailDestination(
-      icon: Container(
-        width: isExpanded ? 24 : 56, // Adjust width based on expansion state
-        child: Icon(icon),
+      icon: Tooltip(
+        message: isExpanded ? '' : label,
+        child: Container(
+          width: isExpanded ? 24 : 56,
+          child: Icon(icon),
+        ),
       ),
       label: isExpanded
           ? Text(label)

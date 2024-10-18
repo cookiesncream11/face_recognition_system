@@ -41,6 +41,7 @@ dependencies:
   file_picker: ^8.1.2
   video_player: ^2.9.2
   table_calendar: ^3.1.2
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:
@@ -61,23 +62,32 @@ flutter:
   assets:
     - lib/images/qr-scan.png
     - lib/images/indian.jpg
-    - lib/images/add-user.png
     - lib/images/user-gear.png
     - lib/images/user.png
     - lib/images/Fdsap.png
-    - lib/images/fdsap.mp4
-    - lib/images/bgfdsap.png
-    - lib/images/bilog.png
     - lib/images/fds.png
     - lib/images/fds-icon.png
     - lib/images/new.png
 
     #background assets
+    - lib/images/background/bg.png
+    - lib/images/background/bgfdsap.png
+    - lib/images/background/bfds.png
     - lib/images/background/1.png
     - lib/images/background/2.png
     - lib/images/background/3.png
     - lib/images/background/4.png
+    - lib/images/background/5.png
+    - lib/images/background/6.png
     - lib/images/background/8.png
+    - lib/images/background/11.png
+    - lib/images/background/12.png
+    - lib/images/background/13.png
+    - lib/images/background/14.png
+    #icon
+    - lib/images/icon/admin_user.png
+    - lib/images/icon/linkedin-logo.png
+    - lib/images/icon/world-wide-web.png
     
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

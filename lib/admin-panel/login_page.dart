@@ -73,11 +73,14 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('lib/images/bgfdsap.png'),
+            image: AssetImage('lib/images/background/bg.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -102,7 +105,9 @@ class _LoginPageState extends State<LoginPage> {
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(20.0),
                 child: SizedBox(
-                  width: 350,
+                  width: screenWidth < 400
+                      ? screenWidth * 0.9
+                      : 350, // Adaptive width
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
