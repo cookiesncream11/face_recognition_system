@@ -5,6 +5,7 @@ import 'sidebar_pages/shifts.dart';
 import 'sidebar_pages/notifications.dart';
 import 'sidebar_pages/settings.dart';
 import 'sidebar_pages/calendar.dart';
+import '../admin-panel/login_page.dart';
 
 void main() {
   runApp(const AdminDashboard());
@@ -67,37 +68,22 @@ class _DashboardPageState extends State<DashboardPage> {
                         height: 200,
                       ),
                     )
-                  : const SizedBox.shrink(), // Hide the logo when collapsed
+                  : Center(
+                      child: Image.asset(
+                        'lib/images/fds-icon.png', // Same image for collapsed
+                        width: 50, // Smaller size
+                        height: 50,
+                      ),
+                    ), // Show smaller logo when collapsed
             ),
-            destinations: const [
-              NavigationRailDestination(
-                icon: Icon(Icons.notifications),
-                label: Text("Notifications"),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.people),
-                label: Text("Employees"),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.settings),
-                label: Text("Settings"),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.business),
-                label: Text("Departments"),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.schedule),
-                label: Text("Shifts"),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.calendar_today),
-                label: Text("Calendar"),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.logout),
-                label: Text("Logout"),
-              ),
+            destinations: [
+              _buildDestination(Icons.notifications, "Notifications"),
+              _buildDestination(Icons.people, "Employees"),
+              _buildDestination(Icons.settings, "Settings"),
+              _buildDestination(Icons.business, "Departments"),
+              _buildDestination(Icons.schedule, "Shifts"),
+              _buildDestination(Icons.calendar_today, "Calendar"),
+              _buildDestination(Icons.logout, "Logout"),
             ],
             selectedIndex: selectedIndex,
             onDestinationSelected: (int index) {
@@ -199,6 +185,19 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
+  NavigationRailDestination _buildDestination(IconData icon, String label) {
+    return NavigationRailDestination(
+      icon: Container(
+        width: isExpanded ? 24 : 56, // Adjust width based on expansion state
+        child: Icon(icon),
+      ),
+      label: isExpanded
+          ? Text(label)
+          : Container(
+              width: 56, alignment: Alignment.center, child: Text(label)),
+    );
+  }
+
   void _showLogoutConfirmationDialog() {
     showDialog(
       context: context,
@@ -270,19 +269,6 @@ class _InfoCard extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-// Placeholder for Admin class
-class Admin extends StatelessWidget {
-  const Admin({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Admin Login")),
-      body: const Center(child: Text("Admin Login Page")),
     );
   }
 }

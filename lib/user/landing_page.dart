@@ -66,9 +66,21 @@ class GetStartedPageState extends State<GetStartedPage>
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Stack(
         children: [
+          // Background Color with Image
+          Container(
+            color: Colors.white, // Set the background color to red
+            child: Center(
+              child: Image.asset(
+                'lib/images/background/8.png', // Path to your background image
+                fit: BoxFit.cover,
+                width: screenWidth,
+                height: screenHeight,
+              ),
+            ),
+          ),
+
           // Centered Content
           Align(
             alignment: Alignment.centerRight,
@@ -76,7 +88,7 @@ class GetStartedPageState extends State<GetStartedPage>
               padding: EdgeInsets.only(right: screenWidth > 600 ? 150.0 : 50.0),
               child: SingleChildScrollView(
                 padding: EdgeInsets.only(
-                  bottom: screenHeight * 0.1, // Add padding to prevent overflow
+                  bottom: screenHeight * 0.1, // Prevent overflow
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -113,10 +125,8 @@ class GetStartedPageState extends State<GetStartedPage>
                     // Responsive Button
                     Container(
                       constraints: BoxConstraints(
-                        maxWidth: screenWidth > 600
-                            ? 300
-                            : 200, // Max width for larger screens
-                        minWidth: 200, // Minimum width
+                        maxWidth: screenWidth > 600 ? 300 : 200,
+                        minWidth: 200,
                       ),
                       child: ElevatedButton(
                         onPressed: () {
@@ -129,9 +139,7 @@ class GetStartedPageState extends State<GetStartedPage>
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF250000),
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 15,
-                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 15),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -222,6 +230,17 @@ class GetStartedPageState extends State<GetStartedPage>
                   ),
                 ),
               ],
+            ),
+          ),
+
+          // Additional Background Image (Bottom Left)
+          Positioned(
+            bottom: 20,
+            left: 20,
+            child: Image.asset(
+              'lib/images/background/4.png', // Adjust this path as necessary
+              height: 100, // Adjust the size as needed
+              fit: BoxFit.cover,
             ),
           ),
         ],

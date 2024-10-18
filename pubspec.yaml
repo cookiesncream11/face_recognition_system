@@ -67,10 +67,18 @@ flutter:
     - lib/images/Fdsap.png
     - lib/images/fdsap.mp4
     - lib/images/bgfdsap.png
-    - lib/images/1005.png
     - lib/images/bilog.png
     - lib/images/fds.png
     - lib/images/fds-icon.png
+    - lib/images/new.png
+
+    #background assets
+    - lib/images/background/1.png
+    - lib/images/background/2.png
+    - lib/images/background/3.png
+    - lib/images/background/4.png
+    - lib/images/background/8.png
+    
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

@@ -4,9 +4,10 @@ import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'landing_page.dart';
+import '../user/registration.dart';
 
 class Recognize extends StatefulWidget {
-  const Recognize({Key? key}) : super(key: key);
+  const Recognize({super.key});
 
   @override
   State<Recognize> createState() => _RecognizeState();
@@ -29,12 +30,11 @@ class _RecognizeState extends State<Recognize> {
     }
   }
 
-  Future<void> captureImage() async {
-    // Check if the platform is web
+  Future<void> scanImage() async {
     if (kIsWeb) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Camera capture is not available on the web."),
+          content: Text("Camera scan is not available on the web."),
         ),
       );
       return;
@@ -47,6 +47,15 @@ class _RecognizeState extends State<Recognize> {
         _image = File(image.path);
       });
     }
+  }
+
+  void continueToRegister() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              const RegistrationPage()), // Update with your registration page
+    );
   }
 
   @override
@@ -99,7 +108,7 @@ class _RecognizeState extends State<Recognize> {
                       width: 200,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: chooseImage,
+                        onPressed: continueToRegister,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF250000),
                           foregroundColor: Colors.white,
@@ -107,7 +116,7 @@ class _RecognizeState extends State<Recognize> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
-                        child: const Text("Choose from Gallery"),
+                        child: const Text("Continue to Register"),
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -115,7 +124,7 @@ class _RecognizeState extends State<Recognize> {
                       width: 200,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: captureImage,
+                        onPressed: scanImage,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF250000),
                           foregroundColor: Colors.white,
@@ -123,7 +132,7 @@ class _RecognizeState extends State<Recognize> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
-                        child: const Text("Capture Image"),
+                        child: const Text("Scan"),
                       ),
                     ),
                   ],
