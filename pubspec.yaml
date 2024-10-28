@@ -62,30 +62,30 @@ flutter:
   assets:
   #img
     - lib/images/img/indian.jpg
-    - lib/images/img/user-gear.png
-    - lib/images/img/user.png
-    - lib/images/img/fds.png
-    - lib/images/img/fds-icon.png
+    - lib/images/img/userGear_Icon.png
+    - lib/images/img/User_Icon.png
+    - lib/images/img/Fds_logo_red.png
+    - lib/images/img/FDS_Icon.png
 
     #background assets
-    - lib/images/background/bg.png
-    - lib/images/background/bgfdsap.png
-    - lib/images/background/bfds.png
-    - lib/images/background/1.png
-    - lib/images/background/2.png
-    - lib/images/background/3.png
-    - lib/images/background/4.png
-    - lib/images/background/5.png
-    - lib/images/background/6.png
-    - lib/images/background/8.png
-    - lib/images/background/11.png
-    - lib/images/background/12.png
-    - lib/images/background/13.png
-    - lib/images/background/14.png
+    - lib/images/background/Background1.png
+    - lib/images/background/Background2.png
+    - lib/images/background/FDS_Logo_Black.png
+    - lib/images/background/origin.png
+    - lib/images/background/Gear_Icon.png
+    - lib/images/background/FDSAP_logo.png
+    - lib/images/background/FDS.png
+    - lib/images/background/Technology line futuristic.png
+    - lib/images/background/Robotic_background.png
+    - lib/images/background/Grid_black.png
+    - lib/images/background/Grid_pink2.png
+    - lib/images/background/Robotic_background2.png
+    - lib/images/background/Logo.png
+    - lib/images/background/Hexagon_Element.png
     #icon
-    - lib/images/icon/admin_user.png
-    - lib/images/icon/linkedin-logo.png
-    - lib/images/icon/world-wide-web.png
+    - lib/images/icon/admin.png
+    - lib/images/icon/Linkedin-logo.png
+    - lib/images/icon/WWW.png
     
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

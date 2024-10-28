@@ -81,7 +81,7 @@ class GetStartedPageState extends State<GetStartedPage>
             bottom: 2,
             right: 20,
             child: Image.asset(
-              'lib/images/background/14.png',
+              'lib/images/background/Hexagon_Element.png',
               height: 500,
               fit: BoxFit.cover,
             ),
@@ -176,7 +176,7 @@ class GetStartedPageState extends State<GetStartedPage>
             child: RotationTransition(
               turns: _rotationAnimation,
               child: Image.asset(
-                'lib/images/background/12.png',
+                'lib/images/background/Robotic_background2.png',
                 height: 350,
                 fit: BoxFit.cover,
               ),
@@ -188,7 +188,7 @@ class GetStartedPageState extends State<GetStartedPage>
             right: 0,
             child: IconButton(
               icon: Image.asset(
-                'lib/images/icon/admin_user.png',
+                'lib/images/icon/admin.png',
                 height: 24,
                 width: 24,
               ),
@@ -249,7 +249,7 @@ class GetStartedPageState extends State<GetStartedPage>
             bottom: 10,
             left: 20,
             child: Image.asset(
-              'lib/images/background/13.png',
+              'lib/images/background/Logo.png',
               height: 100,
               fit: BoxFit.cover,
             ),
@@ -268,7 +268,7 @@ class GetStartedPageState extends State<GetStartedPage>
                   children: [
                     IconButton(
                       icon: Image.asset(
-                        'lib/images/icon/world-wide-web.png',
+                        'lib/images/icon/WWW.png',
                         height: 22,
                         width: 22,
                       ),
@@ -281,7 +281,7 @@ class GetStartedPageState extends State<GetStartedPage>
                     SizedBox(width: iconSpacing),
                     IconButton(
                       icon: Image.asset(
-                        'lib/images/icon/linkedin-logo.png',
+                        'lib/images/icon/Linkedin-logo.png',
                         height: 22,
                         width: 22,
                       ),

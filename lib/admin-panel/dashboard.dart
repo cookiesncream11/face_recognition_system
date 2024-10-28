@@ -61,14 +61,14 @@ class _DashboardPageState extends State<DashboardPage> {
               child: isExpanded
                   ? Center(
                       child: Image.asset(
-                        'lib/images/img/fds-icon.png',
+                        'lib/images/img/FDS_Icon.png',
                         width: 200,
                         height: 200,
                       ),
                     )
                   : Center(
                       child: Image.asset(
-                        'lib/images/img/fds-icon.png',
+                        'lib/images/img/FDS_Icon.png',
                         width: 50, // Smaller size
                         height: 50,
                       ),

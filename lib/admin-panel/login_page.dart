@@ -80,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('lib/images/background/bg.png'),
+            image: AssetImage('lib/images/background/Background1.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -132,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                             radius: 64,
                             backgroundColor: Colors.transparent,
                             backgroundImage:
-                                AssetImage('lib/images/img/user.png'),
+                                AssetImage('lib/images/img/User_Icon.png'),
                           ),
                           const SizedBox(height: 20),
                           const Text("Admin Login"),
