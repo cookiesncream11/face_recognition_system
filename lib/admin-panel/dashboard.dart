@@ -61,26 +61,26 @@ class _DashboardPageState extends State<DashboardPage> {
               child: isExpanded
                   ? Center(
                       child: Image.asset(
-                        'lib/images/fds-icon.png',
+                        'lib/images/img/fds-icon.png',
                         width: 200,
                         height: 200,
                       ),
                     )
                   : Center(
                       child: Image.asset(
-                        'lib/images/fds-icon.png',
+                        'lib/images/img/fds-icon.png',
                         width: 50, // Smaller size
                         height: 50,
                       ),
                     ),
             ),
             destinations: [
-              _buildDestination(Icons.notifications, "Notifications"),
               _buildDestination(Icons.people, "Employees"),
-              _buildDestination(Icons.settings, "Settings"),
               _buildDestination(Icons.business, "Departments"),
               _buildDestination(Icons.schedule, "Shifts"),
               _buildDestination(Icons.calendar_today, "Calendar"),
+              _buildDestination(Icons.notifications, "Notifications"),
+              _buildDestination(Icons.settings, "Settings"),
               _buildDestination(Icons.logout, "Logout"),
             ],
             selectedIndex: selectedIndex,
@@ -89,22 +89,24 @@ class _DashboardPageState extends State<DashboardPage> {
                 selectedIndex = index;
                 switch (index) {
                   case 0:
-                    currentScreen = const NotificationsScreen();
+                    currentScreen = const EmployeesScreen();
+
                     break;
                   case 1:
-                    currentScreen = const EmployeesScreen();
-                    break;
-                  case 2:
-                    currentScreen = const SettingsScreen();
-                    break;
-                  case 3:
                     currentScreen = const DepartmentsScreen();
                     break;
-                  case 4:
+                  case 2:
                     currentScreen = const ShiftsScreen();
                     break;
-                  case 5:
+                  case 3:
                     currentScreen = const CalendarScreen();
+
+                    break;
+                  case 4:
+                    currentScreen = const NotificationsScreen();
+                    break;
+                  case 5:
+                    currentScreen = const SettingsScreen();
                     break;
                   case 6:
                     _showLogoutConfirmationDialog();
@@ -125,7 +127,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       IconButton(
                         onPressed: () {
                           setState(() {
-                            isExpanded = !isExpanded; // Toggle expansion
+                            isExpanded = !isExpanded;
                           });
                         },
                         icon: const Icon(Icons.menu),

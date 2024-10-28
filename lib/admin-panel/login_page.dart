@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    //final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: Container(
@@ -131,7 +131,8 @@ class _LoginPageState extends State<LoginPage> {
                           const CircleAvatar(
                             radius: 64,
                             backgroundColor: Colors.transparent,
-                            backgroundImage: AssetImage('lib/images/user.png'),
+                            backgroundImage:
+                                AssetImage('lib/images/img/user.png'),
                           ),
                           const SizedBox(height: 20),
                           const Text("Admin Login"),
@@ -199,9 +200,9 @@ class _LoginPageState extends State<LoginPage> {
                                 });
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF250000),
+                                backgroundColor: const Color(0xFFDD3333),
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 50, vertical: 15),
+                                    horizontal: 50, vertical: 20),
                               ),
                               child: const Text(
                                 "Login",

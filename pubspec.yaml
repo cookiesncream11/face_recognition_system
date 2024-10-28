@@ -60,14 +60,12 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-    - lib/images/qr-scan.png
-    - lib/images/indian.jpg
-    - lib/images/user-gear.png
-    - lib/images/user.png
-    - lib/images/Fdsap.png
-    - lib/images/fds.png
-    - lib/images/fds-icon.png
-    - lib/images/new.png
+  #img
+    - lib/images/img/indian.jpg
+    - lib/images/img/user-gear.png
+    - lib/images/img/user.png
+    - lib/images/img/fds.png
+    - lib/images/img/fds-icon.png
 
     #background assets
     - lib/images/background/bg.png

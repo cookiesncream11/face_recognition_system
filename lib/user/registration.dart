@@ -19,9 +19,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
           onPressed: () async {
             await someAsyncOperation();
 
-            if (!mounted) return; // Ensure the widget is still mounted
+            if (!mounted) return;
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => NextPage(), // Replace with your next page
+              builder: (context) => NextPage(),
             ));
           },
           child: const Text('Register'),

@@ -114,7 +114,7 @@ class GetStartedPageState extends State<GetStartedPage>
                   children: [
                     const SizedBox(height: 100),
                     Image.asset(
-                      'lib/images/indian.jpg',
+                      'lib/images/img/indian.jpg',
                       height: screenWidth > 600 ? 250 : 200,
                       fit: BoxFit.cover,
                     ),
@@ -152,8 +152,8 @@ class GetStartedPageState extends State<GetStartedPage>
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF250000),
-                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          backgroundColor: const Color(0xFFDD3333),
+                          padding: const EdgeInsets.symmetric(vertical: 18),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
