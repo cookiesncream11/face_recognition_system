@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'landing_page.dart';
 import '../user/registration.dart';
+import 'package:camera/camera.dart';
 
 class Recognize extends StatefulWidget {
   const Recognize({super.key});
@@ -16,6 +17,36 @@ class Recognize extends StatefulWidget {
 class _RecognizeState extends State<Recognize> {
   File? _image;
   final ImagePicker _picker = ImagePicker();
+  CameraController? _cameraController;
+  bool _isCameraInitialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeCamera();
+  }
+
+  Future<void> _initializeCamera() async {
+    final cameras = await availableCameras();
+    _cameraController = CameraController(cameras.first, ResolutionPreset.high);
+    await _cameraController?.initialize();
+    setState(() {
+      _isCameraInitialized = true;
+    });
+  }
+
+  Future<void> _captureImage() async {
+    if (_cameraController != null && _cameraController!.value.isInitialized) {
+      try {
+        final XFile image = await _cameraController!.takePicture();
+        setState(() {
+          _image = File(image.path);
+        });
+      } catch (e) {
+        print('Error capturing image: $e');
+      }
+    }
+  }
 
   Future<void> chooseImage() async {
     // Use file_picker for web
@@ -30,32 +61,17 @@ class _RecognizeState extends State<Recognize> {
     }
   }
 
-  Future<void> scanImage() async {
-    if (kIsWeb) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Camera scan is not available on the web."),
-        ),
-      );
-      return;
-    }
-
-    // Use image_picker for mobile
-    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
-    if (image != null) {
-      setState(() {
-        _image = File(image.path);
-      });
-    }
-  }
-
   void continueToRegister() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) =>
-              const RegistrationPage()), // Update with your registration page
+      MaterialPageRoute(builder: (context) => RegistrationPage()),
     );
+  }
+
+  @override
+  void dispose() {
+    _cameraController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -124,7 +140,17 @@ class _RecognizeState extends State<Recognize> {
                       width: 200,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: scanImage,
+                        onPressed: () {
+                          if (_isCameraInitialized) {
+                            _captureImage();
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Camera is not initialized."),
+                              ),
+                            );
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF250000),
                           foregroundColor: Colors.white,
@@ -135,6 +161,13 @@ class _RecognizeState extends State<Recognize> {
                         child: const Text("Scan"),
                       ),
                     ),
+                    const SizedBox(height: 20),
+                    _isCameraInitialized
+                        ? AspectRatio(
+                            aspectRatio: 1, // Keep it square for circular shape
+                            child: CameraPreview(_cameraController!),
+                          )
+                        : Center(child: CircularProgressIndicator()),
                   ],
                 ),
               ),

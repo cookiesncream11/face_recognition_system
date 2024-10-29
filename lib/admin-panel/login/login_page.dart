@@ -1,6 +1,8 @@
-import 'package:face_recognition_design/admin-panel/dashboard.dart';
+import 'package:face_recognition_design/admin-panel/dashboard/dashboard.dart';
 import 'package:face_recognition_design/user/landing_page.dart';
 import 'package:flutter/material.dart';
+import '../login/images.dart';
+import '../login/login_button.dart';
 
 void main() {
   runApp(const Admin());
@@ -61,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
         Future.delayed(const Duration(seconds: 1), () {
           _emailController.clear();
           _passwordController.clear();
-          onSuccess(); // Call the callback to navigate
+          onSuccess();
         });
       } else {
         _showDialog('Invalid username or password');
@@ -74,13 +76,12 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    //final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('lib/images/background/Background1.png'),
+            image: AssetImage(AppImages.background),
             fit: BoxFit.cover,
           ),
         ),
@@ -105,9 +106,7 @@ class _LoginPageState extends State<LoginPage> {
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(20.0),
                 child: SizedBox(
-                  width: screenWidth < 400
-                      ? screenWidth * 0.9
-                      : 350, // Adaptive width
+                  width: screenWidth < 400 ? screenWidth * 0.9 : 350,
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -131,8 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                           const CircleAvatar(
                             radius: 64,
                             backgroundColor: Colors.transparent,
-                            backgroundImage:
-                                AssetImage('lib/images/img/User_Icon.png'),
+                            backgroundImage: AssetImage(AppImages.userIcon),
                           ),
                           const SizedBox(height: 20),
                           const Text("Admin Login"),
@@ -186,30 +184,17 @@ class _LoginPageState extends State<LoginPage> {
                             },
                           ),
                           const SizedBox(height: 20),
-                          SizedBox(
-                            width: double.infinity, // Full width for the button
-                            child: ElevatedButton(
-                              onPressed: () {
-                                _login(() {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const DashboardPage()),
-                                  );
-                                });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFDD3333),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 50, vertical: 20),
-                              ),
-                              child: const Text(
-                                "Login",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 18),
-                              ),
-                            ),
+                          LoginButton(
+                            onPressed: () {
+                              _login(() {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const DashboardPage()),
+                                );
+                              });
+                            },
                           ),
                         ],
                       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'camera.dart';
-import '../admin-panel/login_page.dart';
+import 'scan.dart';
+import '../admin-panel/login/login_page.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';

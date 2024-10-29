@@ -5,7 +5,7 @@ import 'sidebar_pages/shifts.dart';
 import 'sidebar_pages/notifications.dart';
 import 'sidebar_pages/settings.dart';
 import 'sidebar_pages/calendar.dart';
-import '../admin-panel/login_page.dart';
+import '../login/login_page.dart';
 
 void main() {
   runApp(const AdminDashboard());
