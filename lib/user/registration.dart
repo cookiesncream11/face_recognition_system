@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'dart:io';
+import '../user/scan.dart';
 
 void main() => runApp(RegistrationPage());
 
@@ -9,6 +10,7 @@ class RegistrationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Employee Registration',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
       home: EmployeeRegistrationScreen(),
     );
@@ -66,7 +68,20 @@ class _EmployeeRegistrationScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Register Employee')),
+      appBar: AppBar(
+        title: const Text('Register Employee'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back), // Default color is black
+          color: Colors.black, // Set the icon color to black
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const Recognize()),
+              (route) => false,
+            );
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
