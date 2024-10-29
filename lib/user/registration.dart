@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'dart:io';
 import '../user/scan.dart';
+import '../user/widgets/buttons.dart';
 
 void main() => runApp(RegistrationPage());
 
@@ -51,7 +52,7 @@ class _EmployeeRegistrationScreenState
       try {
         final XFile image = await _cameraController!.takePicture();
         setState(() {
-          _imagePath = image.path; // Save the captured image path
+          _imagePath = image.path;
         });
       } catch (e) {
         print('Error capturing image: $e');
@@ -70,9 +71,7 @@ class _EmployeeRegistrationScreenState
     return Scaffold(
       appBar: AppBar(
         title: const Text('Register Employee'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back), // Default color is black
-          color: Colors.black, // Set the icon color to black
+        leading: CustomBackButton(
           onPressed: () {
             Navigator.pushAndRemoveUntil(
               context,
@@ -96,7 +95,7 @@ class _EmployeeRegistrationScreenState
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Center(
                 child: Container(
                   width: 300, // Set width for the TextField
@@ -111,10 +110,10 @@ class _EmployeeRegistrationScreenState
                   ? Center(
                       child: ClipOval(
                         child: Container(
-                          width: 400, // Increased width for a larger circle
-                          height: 400, // Increased height to match width
+                          width: 400,
+                          height: 400,
                           child: AspectRatio(
-                            aspectRatio: 1, // Keep it square for circular shape
+                            aspectRatio: 1,
                             child: CameraPreview(_cameraController!),
                           ),
                         ),
@@ -122,16 +121,17 @@ class _EmployeeRegistrationScreenState
                     )
                   : Center(child: CircularProgressIndicator()),
               SizedBox(height: 16),
-              ElevatedButton(
+              CaptureButton(
+                // Use the new CaptureButton
                 onPressed: _captureImage,
-                child: const Text('Capture Image'),
               ),
               SizedBox(height: 16),
               _imagePath != null
                   ? Image.file(File(_imagePath!)) // Display captured image
                   : Container(),
               SizedBox(height: 16),
-              ElevatedButton(
+              SendButton(
+                // Use the new SendButton
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -139,7 +139,6 @@ class _EmployeeRegistrationScreenState
                             'Registered: ${_nameController.text}, Job: ${_jobController.text}')),
                   );
                 },
-                child: const Text('Register Employee'),
               ),
             ],
           ),
