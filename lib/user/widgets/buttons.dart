@@ -56,10 +56,10 @@ class CaptureButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blue, // Different color for distinction
+          backgroundColor: Colors.blue, 
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30), // Different radius
+            borderRadius: BorderRadius.circular(30), 
           ),
         ),
         child: const Text("Capture Image"),
@@ -82,13 +82,13 @@ class SendButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.orange, // Different color for distinction
+          backgroundColor: Colors.orange,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
         ),
-        child: const Text("Send"), // Button text
+        child: const Text("Send to Register"),
       ),
     );
   }
