@@ -14,14 +14,14 @@ class Recognize extends StatefulWidget {
 
 class _RecognizeState extends State<Recognize> {
   File? _image; // Variable to store captured image
-  CameraController? _cameraController; // Controller for camera operations
+  CameraController? _cameraController;
   bool _isCameraInitialized =
       false; // Flag to check if the camera is initialized
 
   @override
   void initState() {
     super.initState();
-    _initializeCamera(); // Initialize the camera when the widget is created
+    _initializeCamera();
   }
 
   // Method to initialize the camera
@@ -50,7 +50,6 @@ class _RecognizeState extends State<Recognize> {
               image.path); // Save the captured image to the _image variable
         });
 
-        // TODO: Implement face recognition here
         // Load your machine learning model (e.g., TensorFlow Lite, ML Kit)
         // For example:
         // final result = await yourModel.predict(_image);
