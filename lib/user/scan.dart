@@ -14,14 +14,14 @@ class Recognize extends StatefulWidget {
 
 class _RecognizeState extends State<Recognize> {
   File? _image; // Variable to store captured image
-  CameraController? _cameraController;
+  CameraController? _cameraController; // Controller for camera operations
   bool _isCameraInitialized =
       false; // Flag to check if the camera is initialized
 
   @override
   void initState() {
     super.initState();
-    _initializeCamera();
+    _initializeCamera(); // Initialize the camera when the widget is created
   }
 
   // Method to initialize the camera
