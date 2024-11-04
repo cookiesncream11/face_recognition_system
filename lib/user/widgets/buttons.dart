@@ -9,8 +9,7 @@ class CustomBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon:
-          const Icon(Icons.arrow_back, color: Colors.black), // Changed to black
+      icon: const Icon(Icons.arrow_back, color: Colors.black),
       onPressed: onPressed,
     );
   }
@@ -30,7 +29,7 @@ class ContinueButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.green,
+          backgroundColor: const Color(0xFF630606),
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -56,10 +55,10 @@ class CaptureButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blue, 
+          backgroundColor: const Color(0xFF630606),
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30), 
+            borderRadius: BorderRadius.circular(30),
           ),
         ),
         child: const Text("Capture Image"),
@@ -82,7 +81,7 @@ class SendButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.orange,
+          backgroundColor: const Color(0xFF630606),
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),

@@ -119,13 +119,13 @@ class _EmployeeRegistrationScreenState
                         ),
                       ),
                     )
-                  : Center(child: CircularProgressIndicator()),
-              SizedBox(height: 16),
+                  : const Center(child: CircularProgressIndicator()),
+              const SizedBox(height: 16),
               CaptureButton(
                 // Use the new CaptureButton
                 onPressed: _captureImage,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               _imagePath != null
                   ? Image.file(File(_imagePath!)) // Display captured image
                   : Container(),
