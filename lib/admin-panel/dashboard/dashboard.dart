@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'sidebar_pages/employees.dart';
-import 'sidebar_pages/department.dart';
+import 'sidebar_pages/dashboard_page.dart';
 import 'sidebar_pages/shifts.dart';
 import 'sidebar_pages/notifications.dart';
 import 'sidebar_pages/settings.dart';
@@ -37,11 +38,38 @@ class _DashboardPageState extends State<DashboardPage> {
   static const double cardHeight = 120;
   Widget? currentScreen;
   int selectedIndex = 0;
+  int employeeCount = 0; // Employee count
+  int departmentCount = 0; // Department count (you need to implement this)
+  int shiftCount = 0; // Shift count (you need to implement this)
 
   @override
   void initState() {
     super.initState();
     currentScreen = const CalendarScreen();
+    _loadCounts(); // Load counts from SharedPreferences
+  }
+
+  Future<void> _loadCounts() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Load employee count
+    List<String> employeeList = prefs.getStringList('employees') ?? [];
+    setState(() {
+      employeeCount = employeeList.length; // Assuming each entry is an employee
+    });
+
+    // Load department count (implement your logic)
+    // For example:
+    // List<String> departmentList = prefs.getStringList('departments') ?? [];
+    // setState(() {
+    //   departmentCount = departmentList.length;
+    // });
+
+    // Load shift count (implement your logic)
+    // List<String> shiftList = prefs.getStringList('shifts') ?? [];
+    // setState(() {
+    //   shiftCount = shiftList.length;
+    // });
   }
 
   @override
@@ -69,14 +97,14 @@ class _DashboardPageState extends State<DashboardPage> {
                   : Center(
                       child: Image.asset(
                         'lib/images/img/FDS_Icon.png',
-                        width: 50, // Smaller size
+                        width: 50,
                         height: 50,
                       ),
                     ),
             ),
             destinations: [
+              _buildDestination(Icons.business, "Dashboard"),
               _buildDestination(Icons.people, "Employees"),
-              _buildDestination(Icons.business, "Departments"),
               _buildDestination(Icons.schedule, "Shifts"),
               _buildDestination(Icons.calendar_today, "Calendar"),
               _buildDestination(Icons.notifications, "Notifications"),
@@ -89,18 +117,16 @@ class _DashboardPageState extends State<DashboardPage> {
                 selectedIndex = index;
                 switch (index) {
                   case 0:
-                    currentScreen = const EmployeesScreen();
-
+                    currentScreen = const DepartmentsScreen();
                     break;
                   case 1:
-                    currentScreen = const DepartmentsScreen();
+                    currentScreen = const EmployeesScreen();
                     break;
                   case 2:
                     currentScreen = const ShiftsScreen();
                     break;
                   case 3:
                     currentScreen = const CalendarScreen();
-
                     break;
                   case 4:
                     currentScreen = const NotificationsScreen();
@@ -150,20 +176,20 @@ class _DashboardPageState extends State<DashboardPage> {
                       crossAxisSpacing: 20.0,
                       physics: const NeverScrollableScrollPhysics(),
                       childAspectRatio: cardWidth / cardHeight,
-                      children: const [
+                      children: [
                         _InfoCard(
                           title: "Departments",
-                          count: "5",
+                          count: departmentCount.toString(), // Update this line
                           icon: Icons.business,
                         ),
                         _InfoCard(
                           title: "Shifts",
-                          count: "3",
+                          count: shiftCount.toString(), // Update this line
                           icon: Icons.schedule,
                         ),
                         _InfoCard(
                           title: "Employees",
-                          count: "20",
+                          count: employeeCount.toString(), // Update this line
                           icon: Icons.people,
                         ),
                       ],

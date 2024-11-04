@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'dart:io';
+import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import '../user/registration.dart';
 import '../user/widgets/buttons.dart';
 import 'landing_page.dart';
@@ -13,90 +14,99 @@ class Recognize extends StatefulWidget {
 }
 
 class _RecognizeState extends State<Recognize> {
-  File? _image; // Variable to store captured image
-  CameraController? _cameraController; // Controller for camera operations
-  bool _isCameraInitialized =
-      false; // Flag to check if the camera is initialized
+  File? _image;
+  CameraController? _cameraController;
+  bool _isCameraInitialized = false;
+  List<Face> _detectedFaces = [];
 
   @override
   void initState() {
     super.initState();
-    _initializeCamera(); // Initialize the camera when the widget is created
+    _initializeCamera();
   }
 
-  // Method to initialize the camera
   Future<void> _initializeCamera() async {
-    final cameras = await availableCameras(); // Get available cameras
-    // Create a CameraController to manage camera operations
-    _cameraController = CameraController(cameras.first, ResolutionPreset.high);
+    final cameras = await availableCameras();
+    _cameraController = CameraController(cameras.first, ResolutionPreset.max);
 
-    // Initialize the camera controller
     await _cameraController?.initialize();
-
     setState(() {
-      _isCameraInitialized = true; // Update state once camera is initialized
+      _isCameraInitialized = true;
     });
   }
 
-  // Method to capture an image from the camera
   Future<void> _captureImage() async {
-    // Ensure the camera is initialized before capturing an image
     if (_cameraController != null && _cameraController!.value.isInitialized) {
       try {
-        // Take a picture and get the image as an XFile
         final XFile image = await _cameraController!.takePicture();
         setState(() {
-          _image = File(
-              image.path); // Save the captured image to the _image variable
+          _image = File(image.path);
         });
 
-        // Load your machine learning model (e.g., TensorFlow Lite, ML Kit)
-        // For example:
-        // final result = await yourModel.predict(_image);
+        final options = FaceDetectorOptions(
+          performanceMode: FaceDetectorMode.accurate,
+          enableContours: true,
+          enableClassification: true,
+        );
+        final faceDetector = FaceDetector(options: options);
 
-        // Preprocess the captured image if necessary (resize, normalize, etc.)
-        // Example: final processedImage = preprocessImage(_image);
+        final inputImage = InputImage.fromFilePath(_image!.path);
+        final List<Face> faces = await faceDetector.processImage(inputImage);
 
-        // Use the model to make predictions on the processed image
-        // If a face is recognized, proceed accordingly
+        setState(() {
+          _detectedFaces = faces;
+        });
+
+        if (_detectedFaces.isNotEmpty) {
+          print('Faces detected: ${_detectedFaces.length}');
+        } else {
+          print('No faces detected.');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text('No face detected. Please try again.')),
+          );
+        }
+
+        await faceDetector.close();
       } catch (e) {
-        print(
-            'Error capturing image: $e'); // Handle any errors during image capture
+        print('Error capturing image: $e');
       }
     }
   }
 
-  // Continue to registration page after capturing an image
-  void continueToRegister() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => RegistrationPage()),
-    );
-  }
-
   @override
   void dispose() {
-    _cameraController?.dispose(); // Dispose of the camera controller when done
+    _cameraController?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black, // Background color of the screen
+      backgroundColor: Colors.black,
       body: Stack(
         children: <Widget>[
           _isCameraInitialized
-              ? CameraPreview(_cameraController!) // Display the camera preview
-              : const Center(
-                  child:
-                      CircularProgressIndicator()), // Show loading indicator if camera is not initialized
+              ? CameraPreview(_cameraController!)
+              : const Center(child: CircularProgressIndicator()),
+          if (_isCameraInitialized && _detectedFaces.isNotEmpty)
+            CustomPaint(
+              painter: FacePainter(_detectedFaces, MediaQuery.of(context).size),
+            ),
+          Positioned(
+            bottom: 20,
+            left: MediaQuery.of(context).size.width / 2 - 50,
+            child: ElevatedButton(
+              onPressed: _captureImage,
+              child:
+                  const Icon(Icons.camera_alt, size: 30, color: Colors.white),
+            ),
+          ),
           Positioned(
             top: 4,
             left: 20,
             child: CustomBackButton(
               onPressed: () {
-                // Navigate back to the start page
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
@@ -107,23 +117,65 @@ class _RecognizeState extends State<Recognize> {
             ),
           ),
           Positioned(
-            bottom: 20,
-            left: MediaQuery.of(context).size.width / 2 - 50,
-            child: ElevatedButton(
-              onPressed: _captureImage, // Capture image when button is pressed
-              child:
-                  const Icon(Icons.camera_alt, size: 30, color: Colors.white),
-            ),
-          ),
-          Positioned(
             top: 4,
             right: 20,
             child: ContinueButton(
-              onPressed: continueToRegister, // Navigate to registration page
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => RegistrationPage()),
+                );
+              },
             ),
           ),
         ],
       ),
     );
+  }
+}
+
+class FacePainter extends CustomPainter {
+  final List<Face> faces;
+  final Size screenSize;
+
+  FacePainter(this.faces, this.screenSize);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.red
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3.0;
+
+    for (var face in faces) {
+      final boundingBox = face.boundingBox;
+      final rect = Rect.fromLTRB(
+        boundingBox.left * screenSize.width / size.width,
+        boundingBox.top * screenSize.height / size.height,
+        boundingBox.right * screenSize.width / size.width,
+        boundingBox.bottom * screenSize.height / size.height,
+      );
+
+      // Draw the rectangle around the face
+      canvas.drawRect(rect, paint);
+
+      // Draw the label text above the rectangle
+      final textSpan = TextSpan(
+        text: 'Face Detected',
+        style: TextStyle(color: Colors.red, fontSize: 16),
+      );
+      final textPainter = TextPainter(
+        text: textSpan,
+        textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr,
+      );
+      textPainter.layout();
+      textPainter.paint(canvas, Offset(rect.left, rect.top - 20));
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }

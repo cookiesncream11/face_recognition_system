@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'dart:io';
+import 'package:shared_preferences/shared_preferences.dart'; // Import the package
 import '../user/scan.dart';
 import '../user/widgets/buttons.dart';
 
@@ -27,10 +28,22 @@ class EmployeeRegistrationScreen extends StatefulWidget {
 class _EmployeeRegistrationScreenState
     extends State<EmployeeRegistrationScreen> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _jobController = TextEditingController();
   CameraController? _cameraController;
   bool _isCameraInitialized = false;
   String? _imagePath;
+
+  // List of job titles
+  final List<String> _jobTitles = [
+    'Software Engineer',
+    'Project Manager',
+    'Data Analyst',
+    'UI/UX Designer',
+    'System Administrator',
+    'HR Manager',
+  ];
+
+  // Selected job title
+  String? _selectedJobTitle;
 
   @override
   void initState() {
@@ -58,6 +71,34 @@ class _EmployeeRegistrationScreenState
         print('Error capturing image: $e');
       }
     }
+  }
+
+  Future<void> _registerEmployee() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> pendingList = prefs.getStringList('pending_employees') ?? [];
+    String employeeData =
+        '${_nameController.text},${_selectedJobTitle ?? 'N/A'}'; // No ID here for pending
+    pendingList.add(employeeData); // Add to pending list
+    await prefs.setStringList('pending_employees', pendingList);
+
+    // Create a notification for the new registration
+    List<String> notifications = prefs.getStringList('notifications') ?? [];
+    notifications.add('New registration: $employeeData');
+    await prefs.setStringList('notifications', notifications);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Registration submitted for: ${_nameController.text}, Job: ${_selectedJobTitle ?? 'N/A'}',
+        ),
+      ),
+    );
+
+    // Clear text fields after registration
+    _nameController.clear();
+    setState(() {
+      _selectedJobTitle = null; // Reset dropdown
+    });
   }
 
   @override
@@ -88,7 +129,7 @@ class _EmployeeRegistrationScreenState
             children: [
               Center(
                 child: Container(
-                  width: 300, // Set width for the TextField
+                  width: 300,
                   child: TextField(
                     controller: _nameController,
                     decoration: const InputDecoration(labelText: 'Name'),
@@ -98,10 +139,25 @@ class _EmployeeRegistrationScreenState
               const SizedBox(height: 16),
               Center(
                 child: Container(
-                  width: 300, // Set width for the TextField
-                  child: TextField(
-                    controller: _jobController,
-                    decoration: const InputDecoration(labelText: 'Job Title'),
+                  width: 300,
+                  child: DropdownButtonFormField<String>(
+                    value: _selectedJobTitle,
+                    hint: const Text('Select Job Title'),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedJobTitle = newValue;
+                      });
+                    },
+                    items: _jobTitles
+                        .map<DropdownMenuItem<String>>((String jobTitle) {
+                      return DropdownMenuItem<String>(
+                        value: jobTitle,
+                        child: Text(jobTitle),
+                      );
+                    }).toList(),
                   ),
                 ),
               ),
@@ -122,23 +178,13 @@ class _EmployeeRegistrationScreenState
                   : const Center(child: CircularProgressIndicator()),
               const SizedBox(height: 16),
               CaptureButton(
-                // Use the new CaptureButton
                 onPressed: _captureImage,
               ),
               const SizedBox(height: 16),
-              _imagePath != null
-                  ? Image.file(File(_imagePath!)) // Display captured image
-                  : Container(),
+              _imagePath != null ? Image.file(File(_imagePath!)) : Container(),
               SizedBox(height: 16),
               SendButton(
-                // Use the new SendButton
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        content: Text(
-                            'Registered: ${_nameController.text}, Job: ${_jobController.text}')),
-                  );
-                },
+                onPressed: _registerEmployee, // Call the new function
               ),
             ],
           ),
