@@ -79,7 +79,7 @@ class _DashboardPageState extends State<DashboardPage> {
         children: [
           NavigationRail(
             extended: isExpanded,
-            backgroundColor: const Color(0xFF250000),
+            backgroundColor: const Color.fromARGB(255, 216, 34, 34),
             unselectedIconTheme: const IconThemeData(color: Colors.white),
             unselectedLabelTextStyle: const TextStyle(color: Colors.white),
             selectedIconTheme: const IconThemeData(color: Colors.black),

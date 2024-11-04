@@ -9,12 +9,6 @@ class DepartmentsScreen extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Center(
-          child: Text(
-            "Departments List Here",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-        ),
         const SizedBox(height: 20),
         Expanded(
           child: Padding(
