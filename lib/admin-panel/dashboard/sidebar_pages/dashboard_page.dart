@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../info_holder/pie_chart.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
 
   @override
-  _DashboardState createState() => _DashboardState();
+  _DashboardPageState createState() => _DashboardPageState();
 }
 
-class _DashboardState extends State<Dashboard> {
+class _DashboardPageState extends State<Dashboard> {
+  int onTimeCount = 8;
+  int lateCount = 3;
+  int absentCount = 2;
+
   @override
   void initState() {
     super.initState();
@@ -20,61 +24,28 @@ class _DashboardState extends State<Dashboard> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> employeeList = prefs.getStringList('employees') ?? [];
 
-    setState(() {});
+    setState(() {
+      // Update onTimeCount, lateCount, and absentCount based on actual data if needed.
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Stack(
       children: [
-        const SizedBox(height: 20),
-        const SizedBox(height: 20),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: BarChart(
-              BarChartData(
-                barGroups: [
-                  BarChartGroupData(
-                    x: 0,
-                    barRods: [
-                      BarChartRodData(toY: 8, color: Colors.green, width: 30),
-                    ],
-                  ),
-                  BarChartGroupData(
-                    x: 1,
-                    barRods: [
-                      BarChartRodData(toY: 3, color: Colors.red, width: 30),
-                    ],
-                  ),
-                ],
-                titlesData: FlTitlesData(
-                  leftTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: true),
-                  ),
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 38,
-                      getTitlesWidget: (value, meta) {
-                        switch (value.toInt()) {
-                          case 0:
-                            return const Text('On Time');
-                          case 1:
-                            return const Text('Late');
-                          default:
-                            return const Text('');
-                        }
-                      },
-                    ),
-                  ),
-                ),
-                gridData: const FlGridData(show: false),
-                borderData: FlBorderData(show: true),
-                barTouchData: BarTouchData(enabled: false),
-              ),
-            ),
+        Positioned(
+          top: 10,
+          left: 25,
+          child: CustomPieChart(
+            onTimeCount: onTimeCount,
+            lateCount: lateCount,
+            absentCount: absentCount,
+          ),
+        ),
+        const Center(
+          child: Text(
+            'Center Widget',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
         ),
       ],

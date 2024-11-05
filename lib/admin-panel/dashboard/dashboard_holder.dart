@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'sidebar_pages/employees.dart';
-import 'sidebar_pages/dashboard_page.dart';
+import '../dashboard/sidebar_pages/dashboard_page.dart';
 import 'sidebar_pages/shifts.dart';
 import 'sidebar_pages/notifications.dart';
 import 'sidebar_pages/settings.dart';
 import 'sidebar_pages/calendar.dart';
 import '../login/login_page.dart';
+import 'info_holder/summary_card.dart';
+import 'package:face_recognition_design/responsiveness.dart';
 
 void main() {
   runApp(const AdminDashboard());
@@ -38,10 +40,9 @@ class _DashboardPageState extends State<DashboardPage> {
   static const double cardHeight = 120;
   Widget? currentScreen;
   int selectedIndex = 0;
-  final ValueNotifier<int> employeeCount =
-      ValueNotifier<int>(0); // Use ValueNotifier
-  int departmentCount = 0; // Department count
-  int shiftCount = 0; // Shift count
+  final ValueNotifier<int> employeeCount = ValueNotifier<int>(0);
+  int departmentCount = 0;
+  int shiftCount = 0;
 
   @override
   void initState() {
@@ -53,21 +54,26 @@ class _DashboardPageState extends State<DashboardPage> {
   Future<void> _loadCounts() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    // Load employee count
     List<String> employeeList = prefs.getStringList('employees') ?? [];
-    employeeCount.value = employeeList.length; // Update ValueNotifier
-
-    // Load other counts (add your logic here for departments and shifts)
+    employeeCount.value = employeeList.length;
   }
 
   @override
   void dispose() {
-    employeeCount.dispose(); // Dispose ValueNotifier when done
+    employeeCount.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    return Responsive(
+      mobile: _buildMobileLayout(),
+      tablet: _buildTabletLayout(),
+      desktop: _buildDesktopLayout(),
+    );
+  }
+
+  Widget _buildDesktopLayout() {
     return Scaffold(
       body: Row(
         children: [
@@ -97,7 +103,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
             ),
             destinations: [
-              _buildDestination(Icons.business, "Dashboard"),
+              _buildDestination(Icons.home, "Dashboard"),
               _buildDestination(Icons.people, "Employees"),
               _buildDestination(Icons.schedule, "Shifts"),
               _buildDestination(Icons.calendar_today, "Calendar"),
@@ -116,7 +122,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   case 1:
                     currentScreen = EmployeesScreen(
                       onEmployeeCountChanged: (count) {
-                        employeeCount.value = count; // Update ValueNotifier
+                        employeeCount.value = count;
                       },
                     );
                     break;
@@ -165,7 +171,6 @@ class _DashboardPageState extends State<DashboardPage> {
                     ],
                   ),
                   const SizedBox(height: 20.0),
-                  // Permanent Info Cards
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.3,
                     child: GridView.count(
@@ -175,20 +180,20 @@ class _DashboardPageState extends State<DashboardPage> {
                       physics: const NeverScrollableScrollPhysics(),
                       childAspectRatio: cardWidth / cardHeight,
                       children: [
-                        _InfoCard(
+                        SummaryCard(
                           title: "Departments",
-                          count: departmentCount.toString(), // Update this line
+                          count: departmentCount.toString(),
                           icon: Icons.business,
                         ),
-                        _InfoCard(
+                        SummaryCard(
                           title: "Shifts",
-                          count: shiftCount.toString(), // Update this line
+                          count: shiftCount.toString(),
                           icon: Icons.schedule,
                         ),
                         ValueListenableBuilder<int>(
                           valueListenable: employeeCount,
                           builder: (context, count, _) {
-                            return _InfoCard(
+                            return SummaryCard(
                               title: "Employees",
                               count: count.toString(),
                               icon: Icons.people,
@@ -199,7 +204,6 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   ),
                   const SizedBox(height: 20.0),
-                  // Show the currentScreen based on user selection
                   Flexible(
                     child: currentScreen ?? const CalendarScreen(),
                   ),
@@ -212,19 +216,136 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
+  Widget _buildTabletLayout() {
+    return _buildDesktopLayout(); // Adjust if needed
+  }
+
+  Widget _buildMobileLayout() {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Attendance Management"),
+        backgroundColor: const Color.fromARGB(255, 216, 34, 34),
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                isExpanded = !isExpanded;
+              });
+            },
+            icon: const Icon(Icons.menu),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.2,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                SummaryCard(
+                  title: "Departments",
+                  count: departmentCount.toString(),
+                  icon: Icons.business,
+                ),
+                SummaryCard(
+                  title: "Shifts",
+                  count: shiftCount.toString(),
+                  icon: Icons.schedule,
+                ),
+                ValueListenableBuilder<int>(
+                  valueListenable: employeeCount,
+                  builder: (context, count, _) {
+                    return SummaryCard(
+                      title: "Employees",
+                      count: count.toString(),
+                      icon: Icons.people,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: currentScreen ?? const CalendarScreen(),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: selectedIndex,
+        onTap: (int index) {
+          setState(() {
+            selectedIndex = index;
+            switch (index) {
+              case 0:
+                currentScreen = const Dashboard();
+                break;
+              case 1:
+                currentScreen = EmployeesScreen(
+                  onEmployeeCountChanged: (count) {
+                    employeeCount.value = count;
+                  },
+                );
+                break;
+              case 2:
+                currentScreen = const ShiftsScreen();
+                break;
+              case 3:
+                currentScreen = const CalendarScreen();
+                break;
+              case 4:
+                currentScreen = const NotificationsScreen();
+                break;
+              case 5:
+                currentScreen = const SettingsScreen();
+                break;
+              case 6:
+                _showLogoutConfirmationDialog();
+                return;
+            }
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Dashboard",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            label: "Employees",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.schedule),
+            label: "Shifts",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: "Calendar",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.notifications),
+            label: "Notifications",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: "Settings",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.logout),
+            label: "Logout",
+          ),
+        ],
+      ),
+    );
+  }
+
   NavigationRailDestination _buildDestination(IconData icon, String label) {
     return NavigationRailDestination(
       icon: Tooltip(
         message: isExpanded ? '' : label,
-        child: Container(
-          width: isExpanded ? 24 : 56,
-          child: Icon(icon),
-        ),
+        child: Icon(icon),
       ),
-      label: isExpanded
-          ? Text(label)
-          : Container(
-              width: 56, alignment: Alignment.center, child: Text(label)),
+      label: Text(label),
     );
   }
 
@@ -233,9 +354,9 @@ class _DashboardPageState extends State<DashboardPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Logout"),
+          title: const Text("Confirm Logout"),
           content: const Text("Are you sure you want to log out?"),
-          actions: <Widget>[
+          actions: [
             TextButton(
               child: const Text("Cancel"),
               onPressed: () {
@@ -243,62 +364,16 @@ class _DashboardPageState extends State<DashboardPage> {
               },
             ),
             TextButton(
-              child: const Text("Yes"),
+              child: const Text("Logout"),
               onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Admin()),
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
                 );
               },
             ),
           ],
         );
       },
-    );
-  }
-}
-
-class _InfoCard extends StatelessWidget {
-  const _InfoCard({
-    Key? key,
-    required this.title,
-    required this.count,
-    required this.icon,
-  }) : super(key: key);
-
-  final String title;
-  final String count;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: SizedBox(
-        width: _DashboardPageState.cardWidth,
-        height: _DashboardPageState.cardHeight,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: _DashboardPageState.cardHeight * 0.3),
-              const SizedBox(height: 10),
-              Text(
-                title,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                count,
-                style:
-                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

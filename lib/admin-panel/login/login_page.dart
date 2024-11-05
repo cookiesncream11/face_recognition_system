@@ -1,4 +1,4 @@
-import 'package:face_recognition_design/admin-panel/dashboard/dashboard.dart';
+import 'package:face_recognition_design/admin-panel/dashboard/dashboard_holder.dart';
 import '../../user_interface/scan.dart';
 import 'package:flutter/material.dart';
 import '../login/images.dart';

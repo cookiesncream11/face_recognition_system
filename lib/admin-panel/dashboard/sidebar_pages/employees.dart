@@ -12,8 +12,6 @@ class EmployeesScreen extends StatefulWidget {
 
 class _EmployeesScreenState extends State<EmployeesScreen> {
   List<List<String>> _employees = [];
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _jobTitleController = TextEditingController();
 
   @override
   void initState() {
@@ -34,30 +32,21 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
     });
   }
 
-  Future<void> _addEmployee() async {
+  Future<void> _deleteEmployee(int index) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String name = _nameController.text;
-    String jobTitle = _jobTitleController.text;
 
-    if (name.isNotEmpty && jobTitle.isNotEmpty) {
-      // Create a new employee entry
-      String newEmployee = '${_employees.length + 1},$name,$jobTitle';
-      _employees.add(newEmployee.split(','));
+    // Remove employee from the list
+    _employees.removeAt(index);
 
-      // Save the updated list
-      List<String> employeeList = _employees.map((e) => e.join(',')).toList();
-      await prefs.setStringList('employees', employeeList);
+    // Update the employee list in SharedPreferences
+    List<String> employeeList = _employees.map((e) => e.join(',')).toList();
+    await prefs.setStringList('employees', employeeList);
 
-      // Clear input fields
-      _nameController.clear();
-      _jobTitleController.clear();
+    // Notify the count of employees
+    widget.onEmployeeCountChanged(_employees.length);
 
-      // Notify the count of employees
-      widget.onEmployeeCountChanged(_employees.length);
-
-      // Reload employees
-      _loadEmployees();
-    }
+    // Reload the employees
+    _loadEmployees();
   }
 
   @override
@@ -74,24 +63,6 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 20),
-              TextField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Name',
-                ),
-              ),
-              TextField(
-                controller: _jobTitleController,
-                decoration: const InputDecoration(
-                  labelText: 'Job Title',
-                ),
-              ),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: _addEmployee,
-                child: const Text('Add Employee'),
-              ),
-              const SizedBox(height: 20),
               DataTable(
                 headingRowColor: MaterialStateProperty.resolveWith(
                     (states) => Colors.grey.shade200),
@@ -99,8 +70,13 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                   DataColumn(label: Text('ID')),
                   DataColumn(label: Text('Name')),
                   DataColumn(label: Text('Job Title')),
+                  DataColumn(
+                      label: Text('Actions')), // Column for delete action
                 ],
-                rows: _employees.map((employee) {
+                rows: _employees.asMap().entries.map((entry) {
+                  int index = entry.key;
+                  List<String> employee = entry.value;
+
                   String id = employee.length > 0 ? employee[0] : 'N/A';
                   String name = employee.length > 1 ? employee[1] : 'N/A';
                   String jobTitle = employee.length > 2 ? employee[2] : 'N/A';
@@ -109,6 +85,14 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                     DataCell(Text(id)),
                     DataCell(Text(name)),
                     DataCell(Text(jobTitle)),
+                    DataCell(
+                      IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                        onPressed: () {
+                          _showDeleteConfirmationDialog(index);
+                        },
+                      ),
+                    ),
                   ]);
                 }).toList(),
               ),
@@ -116,6 +100,34 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showDeleteConfirmationDialog(int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Delete Employee"),
+          content: const Text(
+              "Are you sure you want to delete this employee? This action cannot be undone."),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: const Text("Delete"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                _deleteEmployee(index); // Proceed with deletion
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
