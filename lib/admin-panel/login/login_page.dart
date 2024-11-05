@@ -1,5 +1,5 @@
 import 'package:face_recognition_design/admin-panel/dashboard/dashboard.dart';
-import 'package:face_recognition_design/user/landing_page.dart';
+import '../../user_interface/scan.dart';
 import 'package:flutter/material.dart';
 import '../login/images.dart';
 import '../login/login_button.dart';
@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const GetStartedPage(),
+                      builder: (context) => const Recognize(),
                     ),
                   );
                 },

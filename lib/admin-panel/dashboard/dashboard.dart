@@ -38,15 +38,16 @@ class _DashboardPageState extends State<DashboardPage> {
   static const double cardHeight = 120;
   Widget? currentScreen;
   int selectedIndex = 0;
-  int employeeCount = 0; // Employee count
-  int departmentCount = 0; // Department count (you need to implement this)
-  int shiftCount = 0; // Shift count (you need to implement this)
+  final ValueNotifier<int> employeeCount =
+      ValueNotifier<int>(0); // Use ValueNotifier
+  int departmentCount = 0; // Department count
+  int shiftCount = 0; // Shift count
 
   @override
   void initState() {
     super.initState();
-    currentScreen = const CalendarScreen();
-    _loadCounts(); // Load counts from SharedPreferences
+    currentScreen = const Dashboard();
+    _loadCounts();
   }
 
   Future<void> _loadCounts() async {
@@ -54,22 +55,15 @@ class _DashboardPageState extends State<DashboardPage> {
 
     // Load employee count
     List<String> employeeList = prefs.getStringList('employees') ?? [];
-    setState(() {
-      employeeCount = employeeList.length; // Assuming each entry is an employee
-    });
+    employeeCount.value = employeeList.length; // Update ValueNotifier
 
-    // Load department count (implement your logic)
-    // For example:
-    // List<String> departmentList = prefs.getStringList('departments') ?? [];
-    // setState(() {
-    //   departmentCount = departmentList.length;
-    // });
+    // Load other counts (add your logic here for departments and shifts)
+  }
 
-    // Load shift count (implement your logic)
-    // List<String> shiftList = prefs.getStringList('shifts') ?? [];
-    // setState(() {
-    //   shiftCount = shiftList.length;
-    // });
+  @override
+  void dispose() {
+    employeeCount.dispose(); // Dispose ValueNotifier when done
+    super.dispose();
   }
 
   @override
@@ -117,10 +111,14 @@ class _DashboardPageState extends State<DashboardPage> {
                 selectedIndex = index;
                 switch (index) {
                   case 0:
-                    currentScreen = const DepartmentsScreen();
+                    currentScreen = const Dashboard();
                     break;
                   case 1:
-                    currentScreen = const EmployeesScreen();
+                    currentScreen = EmployeesScreen(
+                      onEmployeeCountChanged: (count) {
+                        employeeCount.value = count; // Update ValueNotifier
+                      },
+                    );
                     break;
                   case 2:
                     currentScreen = const ShiftsScreen();
@@ -136,7 +134,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     break;
                   case 6:
                     _showLogoutConfirmationDialog();
-                    return; // Exit to prevent setting currentScreen
+                    return;
                 }
               });
             },
@@ -171,7 +169,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.3,
                     child: GridView.count(
-                      crossAxisCount: 3, // 3 cards per row
+                      crossAxisCount: 3,
                       mainAxisSpacing: 20.0,
                       crossAxisSpacing: 20.0,
                       physics: const NeverScrollableScrollPhysics(),
@@ -187,10 +185,15 @@ class _DashboardPageState extends State<DashboardPage> {
                           count: shiftCount.toString(), // Update this line
                           icon: Icons.schedule,
                         ),
-                        _InfoCard(
-                          title: "Employees",
-                          count: employeeCount.toString(), // Update this line
-                          icon: Icons.people,
+                        ValueListenableBuilder<int>(
+                          valueListenable: employeeCount,
+                          builder: (context, count, _) {
+                            return _InfoCard(
+                              title: "Employees",
+                              count: count.toString(),
+                              icon: Icons.people,
+                            );
+                          },
                         ),
                       ],
                     ),

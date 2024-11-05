@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'dart:io';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
-import '../user/registration.dart';
-import '../user/widgets/buttons.dart';
-import 'landing_page.dart';
+import 'registration.dart';
+import 'widgets/buttons.dart';
+import '/admin-panel/login/login_page.dart';
 
 class Recognize extends StatefulWidget {
   const Recognize({super.key});
@@ -109,8 +109,7 @@ class _RecognizeState extends State<Recognize> {
               onPressed: () {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const GetStartedPage()),
+                  MaterialPageRoute(builder: (context) => const Admin()),
                   (route) => false,
                 );
               },

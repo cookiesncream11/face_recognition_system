@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart'; // Import the package
-import '../user/scan.dart';
-import '../user/widgets/buttons.dart';
+import 'scan.dart';
+import 'widgets/buttons.dart';
 
 void main() => runApp(RegistrationPage());
 

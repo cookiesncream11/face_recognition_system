@@ -1,14 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class DepartmentsScreen extends StatelessWidget {
-  const DepartmentsScreen({super.key});
+class Dashboard extends StatefulWidget {
+  const Dashboard({super.key});
+
+  @override
+  _DashboardState createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+  @override
+  void initState() {
+    super.initState();
+    _loadEmployeeCount();
+  }
+
+  Future<void> _loadEmployeeCount() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> employeeList = prefs.getStringList('employees') ?? [];
+
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        const SizedBox(height: 20),
         const SizedBox(height: 20),
         Expanded(
           child: Padding(
@@ -30,7 +50,7 @@ class DepartmentsScreen extends StatelessWidget {
                   ),
                 ],
                 titlesData: FlTitlesData(
-                  leftTitles: AxisTitles(
+                  leftTitles: const AxisTitles(
                     sideTitles: SideTitles(showTitles: true),
                   ),
                   bottomTitles: AxisTitles(
@@ -50,7 +70,7 @@ class DepartmentsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                gridData: FlGridData(show: false),
+                gridData: const FlGridData(show: false),
                 borderData: FlBorderData(show: true),
                 barTouchData: BarTouchData(enabled: false),
               ),
