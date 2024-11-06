@@ -62,7 +62,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 20),
+              // Moved the employee table to the top with no spacing
               DataTable(
                 headingRowColor: MaterialStateProperty.resolveWith(
                     (states) => Colors.grey.shade200),
