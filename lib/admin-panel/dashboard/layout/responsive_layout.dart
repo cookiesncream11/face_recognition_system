@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:face_recognition_design/responsiveness.dart';
 import '../sidebar_pages/sidebar.dart';
-import '../sidebar_pages/calendar.dart';
 import '/controllers/menu_app_controllers.dart';
 
 class ResponsiveLayout extends StatelessWidget {
@@ -62,11 +61,6 @@ class ResponsiveLayout extends StatelessWidget {
                       SizedBox(width: 48),
                     ],
                   ),
-                  // Remove SummaryCard here
-                  const SizedBox(height: 20.0),
-                  Flexible(
-                    child: currentScreen ?? const CalendarScreen(),
-                  ),
                 ],
               ),
             ),
@@ -90,14 +84,6 @@ class ResponsiveLayout extends StatelessWidget {
       drawer: SideMenu(
         onDestinationSelected: onDestinationSelected,
       ),
-      body: Column(
-        children: [
-          // Remove SummaryCard here
-          Flexible(
-            child: currentScreen ?? const CalendarScreen(),
-          ),
-        ],
-      ),
     );
   }
 
@@ -111,17 +97,6 @@ class ResponsiveLayout extends StatelessWidget {
           icon: const Icon(Icons.menu),
           onPressed: menuController.controlMenu,
         ),
-      ),
-      drawer: SideMenu(
-        onDestinationSelected: onDestinationSelected,
-      ),
-      body: Column(
-        children: [
-          // Remove SummaryCard here
-          Flexible(
-            child: currentScreen ?? const CalendarScreen(),
-          ),
-        ],
       ),
     );
   }

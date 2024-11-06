@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class InfoCard extends StatelessWidget {
   final String title;
-  final int? count; // Optional count for dynamic content
+  final int? count;
 
   const InfoCard({Key? key, required this.title, this.count}) : super(key: key);
 
