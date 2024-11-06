@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import '../confirmation/confirmation_dialog.dart';
 
-// SideMenu widget that contains the sidebar navigation
 class SideMenu extends StatelessWidget {
   const SideMenu({
     Key? key,
@@ -14,20 +14,21 @@ class SideMenu extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: [
-          // Drawer Header with red background and resizable image
+          // Drawer Header
           DrawerHeader(
             decoration: const BoxDecoration(
               color: Colors.red, // Set the background color to red
             ),
             child: Center(
               child: SizedBox(
-                width: 150, // Adjust width to resize the image
-                height: 100, // Adjust height to resize the image
+                width: 150,
+                height: 100,
                 child: Image.asset("lib/images/img/FDS_Icon.png",
                     fit: BoxFit.contain),
               ),
             ),
           ),
+          // Other menu items
           DrawerListTile(
             title: "Dashboard",
             icon: Icons.dashboard,
@@ -43,25 +44,23 @@ class SideMenu extends StatelessWidget {
             icon: Icons.schedule,
             press: () => onDestinationSelected(2),
           ),
-          DrawerListTile(
-            title: "Calendar",
-            icon: Icons.calendar_today,
-            press: () => onDestinationSelected(3),
-          ),
+
           DrawerListTile(
             title: "Notifications",
             icon: Icons.notifications,
-            press: () => onDestinationSelected(4),
+            press: () => onDestinationSelected(3),
           ),
           DrawerListTile(
             title: "Settings",
             icon: Icons.settings,
-            press: () => onDestinationSelected(5),
+            press: () => onDestinationSelected(4),
           ),
+          // Logout item
           DrawerListTile(
             title: "Logout",
             icon: Icons.logout,
-            press: () => onDestinationSelected(6),
+            press: () => showLogoutConfirmationDialog(
+                context), // Call the logout function
           ),
         ],
       ),

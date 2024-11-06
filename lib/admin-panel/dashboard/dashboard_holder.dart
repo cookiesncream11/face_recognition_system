@@ -4,7 +4,6 @@ import 'sidebar_pages/employees.dart';
 import 'sidebar_pages/shifts.dart';
 import 'sidebar_pages/notifications.dart';
 import 'sidebar_pages/settings.dart';
-import 'sidebar_pages/calendar.dart';
 import '../dashboard/sidebar_pages/dashboard_page.dart';
 import 'layout/responsive_layout.dart';
 import '/controllers/menu_app_controllers.dart';
@@ -35,8 +34,6 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   bool isExpanded = true;
-  static const double cardWidth = 180;
-  static const double cardHeight = 120;
   Widget? currentScreen;
   int selectedIndex = 0;
   final ValueNotifier<int> employeeCount = ValueNotifier<int>(0);
@@ -47,7 +44,8 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
-    currentScreen = const Dashboard();
+    currentScreen =
+        Dashboard(employeeCount: employeeCount); // Pass employeeCount here
     _loadCounts();
   }
 
@@ -55,11 +53,6 @@ class _DashboardPageState extends State<DashboardPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> employeeList = prefs.getStringList('employees') ?? [];
     employeeCount.value = employeeList.length;
-
-    // Load department and shift counts as needed here
-    // For example:
-    // departmentCount = prefs.getInt('departmentCount') ?? 0;
-    // shiftCount = prefs.getInt('shiftCount') ?? 0;
   }
 
   @override
@@ -73,7 +66,7 @@ class _DashboardPageState extends State<DashboardPage> {
       selectedIndex = index;
       switch (index) {
         case 0:
-          currentScreen = const Dashboard();
+          currentScreen = Dashboard(employeeCount: employeeCount);
           break;
         case 1:
           currentScreen = EmployeesScreen(
@@ -86,12 +79,9 @@ class _DashboardPageState extends State<DashboardPage> {
           currentScreen = const ShiftsScreen();
           break;
         case 3:
-          currentScreen = const CalendarScreen();
-          break;
-        case 4:
           currentScreen = const NotificationsScreen();
           break;
-        case 5:
+        case 4:
           currentScreen = const SettingsScreen();
           break;
       }

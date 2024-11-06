@@ -28,7 +28,8 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
         return employee.split(',');
       }).toList();
       // Notify the count of employees
-      widget.onEmployeeCountChanged(_employees.length);
+      widget.onEmployeeCountChanged(
+          _employees.length); // Pass the count to Dashboard
     });
   }
 

@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:face_recognition_design/responsiveness.dart';
 import '../sidebar_pages/sidebar.dart';
 import '../sidebar_pages/calendar.dart';
-import '../info_holder/summary_card.dart';
 import '/controllers/menu_app_controllers.dart';
-import '../sidebar_pages/dashboard_page.dart';
 
 class ResponsiveLayout extends StatelessWidget {
   final ValueNotifier<int> employeeCount;
@@ -57,45 +55,14 @@ class ResponsiveLayout extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Attendance Management",
+                        "Dashboard",
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(width: 48),
                     ],
                   ),
-                  if (currentScreen is Dashboard)
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      child: GridView.count(
-                        crossAxisCount: 3,
-                        mainAxisSpacing: 20.0,
-                        crossAxisSpacing: 20.0,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: [
-                          SummaryCard(
-                            title: "Departments",
-                            count: departmentCount.toString(),
-                            icon: Icons.business,
-                          ),
-                          SummaryCard(
-                            title: "Shifts",
-                            count: shiftCount.toString(),
-                            icon: Icons.schedule,
-                          ),
-                          ValueListenableBuilder<int>(
-                            valueListenable: employeeCount,
-                            builder: (context, count, _) {
-                              return SummaryCard(
-                                title: "Employees",
-                                count: count.toString(),
-                                icon: Icons.people,
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
+                  // Remove SummaryCard here
                   const SizedBox(height: 20.0),
                   Flexible(
                     child: currentScreen ?? const CalendarScreen(),
@@ -113,7 +80,7 @@ class ResponsiveLayout extends StatelessWidget {
     return Scaffold(
       key: menuController.scaffoldKey,
       appBar: AppBar(
-        title: const Text("Attendance Management"),
+        title: const Text("Dashboard"),
         backgroundColor: const Color.fromARGB(255, 216, 34, 34),
         leading: IconButton(
           icon: const Icon(Icons.menu),
@@ -125,35 +92,7 @@ class ResponsiveLayout extends StatelessWidget {
       ),
       body: Column(
         children: [
-          if (currentScreen is Dashboard)
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.2,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  SummaryCard(
-                    title: "Departments",
-                    count: departmentCount.toString(),
-                    icon: Icons.business,
-                  ),
-                  SummaryCard(
-                    title: "Shifts",
-                    count: shiftCount.toString(),
-                    icon: Icons.schedule,
-                  ),
-                  ValueListenableBuilder<int>(
-                    valueListenable: employeeCount,
-                    builder: (context, count, _) {
-                      return SummaryCard(
-                        title: "Employees",
-                        count: count.toString(),
-                        icon: Icons.people,
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
+          // Remove SummaryCard here
           Flexible(
             child: currentScreen ?? const CalendarScreen(),
           ),
@@ -178,37 +117,7 @@ class ResponsiveLayout extends StatelessWidget {
       ),
       body: Column(
         children: [
-          if (currentScreen is Dashboard)
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.3,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    SummaryCard(
-                      title: "Departments",
-                      count: departmentCount.toString(),
-                      icon: Icons.business,
-                    ),
-                    SummaryCard(
-                      title: "Shifts",
-                      count: shiftCount.toString(),
-                      icon: Icons.schedule,
-                    ),
-                    ValueListenableBuilder<int>(
-                      valueListenable: employeeCount,
-                      builder: (context, count, _) {
-                        return SummaryCard(
-                          title: "Employees",
-                          count: count.toString(),
-                          icon: Icons.people,
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
+          // Remove SummaryCard here
           Flexible(
             child: currentScreen ?? const CalendarScreen(),
           ),

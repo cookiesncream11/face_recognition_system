@@ -15,34 +15,45 @@ class CustomPieChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final total = onTimeCount + lateCount + absentCount;
+
+    // Calculate percentages for each section
+    final onTimePercentage = (onTimeCount / total) * 100;
+    final latePercentage = (lateCount / total) * 100;
+    final absentPercentage = (absentCount / total) * 100;
+
     return SizedBox(
       width: 150, // Specify the size for the pie chart
       height: 150,
       child: PieChart(
         PieChartData(
+          sectionsSpace: 0, // No space between the sections
+          centerSpaceRadius: 60, // Larger center space
+          startDegreeOffset: -90, // Start from the top
           sections: [
             PieChartSectionData(
-              value: onTimeCount.toDouble(),
+              value: onTimePercentage,
               title: 'On Time',
               color: Colors.green,
-              radius: 60,
+              radius: 50, // Adjust radius for compact look
+              showTitle: false, // Hide the title on each section
             ),
             PieChartSectionData(
-              value: lateCount.toDouble(),
+              value: latePercentage,
               title: 'Late',
               color: Colors.red,
-              radius: 60,
+              radius: 45, // Slightly smaller radius for the late section
+              showTitle: false,
             ),
             PieChartSectionData(
-              value: absentCount.toDouble(),
+              value: absentPercentage,
               title: 'Absent',
               color: Colors.grey,
-              radius: 60,
+              radius: 40, // Even smaller radius for absent section
+              showTitle: false,
             ),
           ],
-          borderData: FlBorderData(show: false),
-          centerSpaceRadius: 40,
-          sectionsSpace: 2,
+          borderData: FlBorderData(show: false), // Remove the border
         ),
       ),
     );
