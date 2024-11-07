@@ -27,9 +27,8 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
       _employees = employeeList.map((employee) {
         return employee.split(',');
       }).toList();
-      // Notify the count of employees
-      widget.onEmployeeCountChanged(
-          _employees.length); // Pass the count to Dashboard
+
+      widget.onEmployeeCountChanged(_employees.length);
     });
   }
 
@@ -52,19 +51,16 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SingleChildScrollView(
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16.0),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.blue, width: 2),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Moved the employee table to the top with no spacing
-              DataTable(
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Employee table at the top
+            Container(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: DataTable(
                 headingRowColor: MaterialStateProperty.resolveWith(
                     (states) => Colors.grey.shade200),
                 columns: const [
@@ -97,8 +93,9 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                   ]);
                 }).toList(),
               ),
-            ],
-          ),
+            ),
+            // Any additional content you may want below
+          ],
         ),
       ),
     );

@@ -44,8 +44,7 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
-    currentScreen =
-        Dashboard(employeeCount: employeeCount); // Pass employeeCount here
+    currentScreen = Dashboard(employeeCount: employeeCount);
     _loadCounts();
   }
 

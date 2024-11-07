@@ -16,17 +16,22 @@ class CalendarScreen extends StatelessWidget {
         const SizedBox(height: 10.0),
         Expanded(
           child: SingleChildScrollView(
-            child: TableCalendar(
-              firstDay: DateTime.utc(2023, 1, 1),
-              lastDay: DateTime.utc(2025, 12, 31),
-              focusedDay: DateTime.now(),
-              daysOfWeekHeight: 30, // Ensure enough space for the days
-              headerStyle: HeaderStyle(
-                formatButtonVisible: false, // Hides the format button
-                leftChevronVisible:
-                    false, // Hides the left chevron (previous month arrow)
-                rightChevronVisible:
-                    false, // Hides the right chevron (next month arrow)
+            child: SizedBox(
+              width: 628, // Specified width
+              child: TableCalendar(
+                firstDay: DateTime.utc(2023, 1, 1),
+                lastDay: DateTime.utc(2025, 12, 31),
+                focusedDay: DateTime.now(),
+                daysOfWeekHeight: 30, // Adjust if needed for readability
+                headerStyle: const HeaderStyle(
+                  formatButtonVisible: false, // Hides the format button
+                  leftChevronVisible: false, // Hides the previous month arrow
+                  rightChevronVisible: false, // Hides the next month arrow
+                ),
+                calendarStyle: CalendarStyle(
+                  cellMargin:
+                      const EdgeInsets.all(2), // Reduce spacing between dates
+                ),
               ),
             ),
           ),

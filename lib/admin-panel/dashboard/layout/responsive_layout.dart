@@ -117,7 +117,6 @@ class ResponsiveLayout extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // Remove SummaryCard here
           Flexible(
             child: currentScreen ?? const CalendarScreen(),
           ),
